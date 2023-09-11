@@ -1,0 +1,19 @@
+php_flag magic_qoutes_gpc Off
+
+AddDefaultCharset utf-8
+
+php_value max_execution_time 100
+php_value max_input_time 100
+php_value upload_max_filesize 200M
+php_value post_max_size 200M
+
+DirectoryIndex index.php
+
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !favicon.ico
+RewriteRule ^(.*) index.php
+
+

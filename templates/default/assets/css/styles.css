@@ -1,0 +1,427 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: #f8f8f8;
+}
+
+ul{
+    list-style: none;
+}
+
+header {
+    z-index: 11;
+    position: sticky;
+    width: 100%;
+    height: 66px;
+    top: 0;
+    background-color: #d4e6a7;
+    /*background-position: 148% 230px*/
+
+}
+
+.container {
+    margin: 0 auto;
+    /*background: transparent;
+    padding: 0 22px;*/
+    max-width: 1220px;
+    /*position: relative;*/
+
+}
+
+.header .container .lk{
+    float: right;
+    height: 38px;
+    padding-top: 19px;
+}
+
+
+.player-controls {
+    display: flex;
+    justify-content: space-between;
+    vertical-align: top;
+    padding-top: 19px;
+    height: 38px;
+    width: 80%;
+    float: left;
+}
+
+.player-controls .group {
+    display: flex;
+    justify-content: space-between;
+    vertical-align: top;
+
+}
+
+.progress {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    margin-bottom: -16px;
+    height: 16px;
+    /*background-color: lightgrey;*/
+}
+
+.progress .seek-bar {
+
+    height: 12px;
+    background: #bec0bb;
+
+}
+
+
+.progress .seek-bar .currentTime, .progress .seek-bar .timeLeft {
+    position: fixed;
+    top: 56px;
+    font-size: 12px;
+    color: #fff;
+    right: 10px;
+    line-height: 12px;
+    pointer-events: none
+}
+
+.progress .seek-bar .currentTime {
+    left: 10px
+}
+
+.progress .seek-bar .play-bar {
+    /*display: inline-block;*/
+    height: 12px;
+    vertical-align: 5px;
+    background: #3d6025;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+    width: 0;
+}
+
+.player-controls .group > *{
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.player-controls .group.basic {
+    width: 120px;
+
+
+    margin-top: 4px;
+
+}
+
+.player-controls .group.additional > div{
+    margin-right: 15px;
+}
+
+
+.player-controls .prev {
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) 0 0 no-repeat;
+    width: 29px;
+    height: 29px
+}
+
+.player-controls .prev:active {
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.player-controls .next {
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -126px 0 no-repeat;
+    width: 29px;
+    height: 29px
+}
+
+.player-controls .next:active {
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.player-controls .play, .player-controls .pause {
+    width: 40px;
+    height: 39px;
+    margin-top: -5px
+}
+
+.player-controls .play {
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -42px 0 no-repeat
+}
+
+.player-controls.playing .play {
+    display: none;
+}
+
+
+.player-controls .pause {
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -84px 0 no-repeat
+}
+
+.player-controls .repeat {
+    cursor: pointer;
+    width: 29px;
+    height: 29px;
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -168px 0 no-repeat
+}
+
+.player-controls .repeat:hover {
+    opacity: .8
+}
+
+.player-controls .repeat.active {
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -168px -42px no-repeat
+}
+
+.player-controls .shuffle {
+    cursor: pointer;
+    width: 29px;
+    height: 29px;
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -210px 0 no-repeat
+}
+
+.player-controls .shuffle:hover {
+    opacity: .8
+}
+
+.player-controls .shuffle.active {
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -210px -42px no-repeat
+}
+
+.player-controls .mute {
+    display: block;
+    cursor: pointer;
+    height: 29px;
+    width: 29px;
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -336px 0 no-repeat
+}
+
+.player-controls .mute:hover {
+    opacity: .8
+}
+
+.player-controls .mute.active {
+    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -336px -84px no-repeat
+}
+
+
+.player-controls .volume-bar {
+    margin-top: 12px;
+    cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    display: inline-block !important;
+    border-radius: 14px !important;
+    -moz-border-radius: 14px !important;
+    -webkit-border-radius: 14px !important;
+    width: 84px;
+    height: 6px;
+    background: #385910
+}
+
+.player-controls .volume-bar .volume-bar-value {
+    cursor: pointer;
+    background: #5c9600;
+    width: 90%;
+    height: 6px;
+    transition: width 80ms linear, height 80ms linear
+}
+
+main .container{
+    margin-top: 20px;
+}
+
+.desktop-sidebar{
+    width: 310px;
+    float: right;
+}
+
+.centerMain{
+    width: calc(100% - 310px);
+    float: left;
+}
+
+.boxShadow {
+    background: #fff;
+    border-radius: 3px 3px;
+    -moz-border-radius: 3px 3px;
+    -webkit-border-radius: 3px 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    padding: 6px;
+}
+
+.inInputSearch{
+    position: relative;
+    border: 1px solid #878a85;
+    border-radius: 3px;
+}
+
+
+.inInputSearch input{
+    width: 70%;
+    height: 37px;
+    font-weight: bold;
+    line-height: 37px;
+    border: none;
+    padding-left: 5px;
+}
+
+.inInputSearch button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 37px;
+    width: 91px;
+    font-size: 16px;
+    background-color: #00feff;
+    font-weight: bold;
+    border: none;
+}
+
+.inInputSearch select{
+    position: absolute;
+    top: 0;
+    right: 130px;
+    height: 37px;
+    border: none;
+}
+
+li.item{
+    position: relative;
+    margin-bottom: 5px;
+    background-color: oldlace;
+}
+
+li.item:hover{
+    background-color: tan ;
+}
+
+.item .action, .item.active.pause .action{
+    width: 32px;
+    height: 32px;
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -42px -84px no-repeat;
+    cursor: pointer;
+}
+
+.item.active .action{
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -84px -84px no-repeat
+}
+
+li.item > *{
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.item .description{
+    height: 32px;
+    width: 70%;
+}
+
+.item .duration{
+    width: 32px;
+    height: 32px;
+
+}
+
+.item .download{
+    width: 32px;
+    height: 32px;
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -84px -84px no-repeat
+}
+
+li .delete{
+    width: 20px;
+    height: 20px;
+    background: url(/templates/default/assets/img/cancel.svg)  no-repeat
+}
+
+li .add{
+    width: 20px;
+    height: 20px;
+    background: url(/templates/default/assets/img/star.svg)  no-repeat
+}
+
+li.playlist-item{
+    position: relative;
+    margin-bottom: 5px;
+}
+
+li.playlist-item .delete{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+li.playlist-item.active a{
+    color: red;
+}
+
+.icon-user{
+    width: 24px;
+    height: 24px;
+    background: url(/templates/default/assets/img/visitors.png)  no-repeat;
+    float: left;
+    margin-right: 5px;
+}
+
+.create-new-playlist{
+    position: relative;
+}
+
+.create-new-playlist > button{
+    height: 36px;
+    width: 186px;
+}
+
+.create-new-playlist button:hover{
+   cursor: pointer;
+}
+
+.menu-create-playlist{
+    padding: 5px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 99;
+    display: none;
+    background-color: lightgreen;
+}
+
+.menu-create-playlist.active{
+    display: block;
+}
+
+.menu-create-playlist div{
+    margin: 5px;
+}
+
+li.item .add-to-playlist{
+    display: none;
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    z-index: 99;
+    background-color: lightgrey;
+}
+
+li.item .add-to-playlist.active{
+    display: block;
+}
+
+.seek-bar{
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
