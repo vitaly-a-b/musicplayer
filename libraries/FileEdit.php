@@ -58,6 +58,29 @@ class FileEdit{
 
     }
 
+
+
+    public function addOneFile($key, $index, $directory = ''){
+
+        $this->setDirectory($directory);
+
+        $file_arr['name'] = $_FILES[$key]['name'][$index];
+        $file_arr['type'] = $_FILES[$key]['type'][$index];
+        $file_arr['tmp_name'] = $_FILES[$key]['tmp_name'][$index];
+        $file_arr['error'] = $_FILES[$key]['error'][$index];
+        $file_arr['size'] = $_FILES[$key]['size'][$index];
+
+        $res_name = $this->createFile($file_arr);
+
+        if($res_name) {
+            return $res_name;
+        }
+
+        return null;
+
+    }
+
+
     protected function createFile($file){
 
         $fileNameArr = explode('.', $file['name']);
@@ -82,6 +105,8 @@ class FileEdit{
         return false;
 
     }
+
+
 
     public function checkResizeFile($file){
 
