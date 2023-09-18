@@ -53,6 +53,8 @@ class BaseUser extends BaseController
      */
 
     protected $modals;
+    protected $search;
+    protected $sidebar;
 
     /**
      * @var array hit, sale, week_sale, new
@@ -126,6 +128,14 @@ class BaseUser extends BaseController
 
         if(file_exists($_SERVER['DOCUMENT_ROOT'] . PATH . TEMPLATE . 'include/modals.php')){
             $this->modals = $this->render(TEMPLATE. 'include/modals', $vars);
+        }
+
+        if(file_exists($_SERVER['DOCUMENT_ROOT'] . PATH . TEMPLATE . 'include/search.php')){
+            $this->search = $this->render(TEMPLATE. 'include/search', $vars);
+        }
+
+        if(file_exists($_SERVER['DOCUMENT_ROOT'] . PATH . TEMPLATE . 'include/sidebar.php')){
+            $this->sidebar = $this->render(TEMPLATE. 'include/sidebar', $vars);
         }
 
         if(!$this->content){

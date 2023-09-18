@@ -74,14 +74,15 @@ header {
 }
 
 
-.progress .seek-bar .currentTime, .progress .seek-bar .timeLeft {
+.progress .seek-bar .currentTime, .progress .seek-bar .all-time {
     position: fixed;
     top: 56px;
-    font-size: 12px;
+    font-size: 22px;
     color: #fff;
     right: 10px;
     line-height: 12px;
-    pointer-events: none
+    pointer-events: none;
+    display: none;
 }
 
 .progress .seek-bar .currentTime {
@@ -215,8 +216,8 @@ header {
     border-radius: 14px !important;
     -moz-border-radius: 14px !important;
     -webkit-border-radius: 14px !important;
-    width: 84px;
-    height: 6px;
+    width: 90px;
+    height: 10px;
     background: #385910
 }
 
@@ -224,7 +225,7 @@ header {
     cursor: pointer;
     background: #5c9600;
     width: 90%;
-    height: 6px;
+    height: 10px;
     transition: width 80ms linear, height 80ms linear
 }
 
@@ -414,11 +415,20 @@ li.item .add-to-playlist.active{
     cursor: pointer;
 }
 
+.inited .track-name {
+    visibility: hidden;
+}
 
 
+ul.genre li{
+    width: 100%;
+    display: inline;
+}
 
-
-
+.module-search{
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
 
 
 

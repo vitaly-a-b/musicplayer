@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let time = document.querySelector('.play-bar')
     let audiotrack = document.querySelector('.seek-bar')
 
-    let volume = document.querySelector('.volume-bar')
+    const volume = document.querySelector('.volume-bar')
+    let volumeInside = document.querySelector('.volume-bar-value')
     let mute = document.querySelector('.mute')
 
     let control = document.querySelector('.player-controls')
@@ -62,6 +63,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 }else{
 
+                    if (!document.querySelector('.item.active')){
+                        let item = document.querySelector('.item')
+
+                        if (item){
+                            item.classList.add('active')
+
+                            if (item.querySelector('.play').hasAttribute('data-url')){
+                                audio.src = item.querySelector('.play').getAttribute('data-url')
+                                audio.currentTime = 0;
+                            }
+
+                        }
+                    }
+
+
                     audioplay()
 
                 }
@@ -95,31 +111,109 @@ document.addEventListener('DOMContentLoaded', () => {
 
     audiotrack.addEventListener('click', function(event){
 
-        let width = window.getComputedStyle(audiotrack).width;
+        if (!control.classList.contains('inited')){
 
-        let novstr = Number(width.substr(0, width.length-2));
+            let coordPlayBar = audiotrack.getBoundingClientRect()
 
-        audio.currentTime = event.clientX / novstr * audio.duration;
+            if (coordPlayBar){
+
+                audio.currentTime = (event.clientX - coordPlayBar.x) / coordPlayBar.width * audio.duration;
+                time.style.width =  audio.currentTime/audio.duration * 100 + '%'
+            }
+
+        }
+
+    });
+
+
+
+    audiotrack.addEventListener('mouseover', function(event){
+
+        let timeBarMouseMove = timeBarMouseMoveInit(event)
+
+        if (typeof timeBarMouseMove === 'function'){
+
+            audiotrack.addEventListener('mousemove', timeBarMouseMove);
+
+            audiotrack.addEventListener('mouseout', () => {
+
+                audiotrack.removeEventListener('mousemove', timeBarMouseMove)
+                event.flag = true
+                timeBarMouseMove(event)
+
+            });
+        }
+
+
+    })
+
+
+    function timeBarMouseMoveInit(event){
+
+        if (!control.classList.contains('inited')){
+
+            let currentTimeElement = document.querySelector('.progress .seek-bar .currentTime')
+            let allTimeElement  = document.querySelector('.progress .seek-bar .all-time')
+
+            if (currentTimeElement && allTimeElement){
+
+                allTimeElement.innerText = String(Math.floor(audio.duration/60)) + ':' + String(Math.round(audio.duration%60)).replace(/^\d?$/, '0$&')
+                allTimeElement.style.display = 'block'
+
+
+                let cordTimeBar =  audiotrack.getBoundingClientRect()
+
+                let timeCurrent = (event.clientX - cordTimeBar.x)/cordTimeBar.width * audio.duration
+                currentTimeElement.innerText = String(Math.floor(timeCurrent/60)) + ':' + String(Math.round(timeCurrent%60))
+                currentTimeElement.style.left = event.clientX + 'px'
+                currentTimeElement.style.display = 'block'
+
+                return function (e){
+
+                    if (e.flag){
+                        allTimeElement.style.display = 'none'
+                        currentTimeElement.style.display = 'none'
+
+                    }else{
+
+                        timeCurrent = (e.clientX - cordTimeBar.x)/cordTimeBar.width * audio.duration
+                        currentTimeElement.innerText = String(Math.floor(timeCurrent/60)) + ':' + String(Math.round(timeCurrent%60)).replace(/^\d?$/, '0$&')
+                        currentTimeElement.style.left = e.clientX + 'px'
+                    }
+
+                }
+
+            }
+
+        }
+
+        return null
+
+    }
+
+
+
+
+    volume.addEventListener('mousedown', function(event){
+
+        volumeControl(event)
+
+        volume.addEventListener('mousemove', volumeControl)
+
+        document.addEventListener('mouseup', () => {
+            volume.removeEventListener('mousemove', volumeControl)
+        })
 
     });
 
 
+    function volumeControl(event){
 
+        let cordVolume =  volume.getBoundingClientRect()
+        audio.volume = (event.clientX - cordVolume.x)/cordVolume.width
+        volumeInside.style.width = audio.volume * 100 + '%'
 
-
-    volume.addEventListener('click', function(event){
-
-        let width = window.getComputedStyle(volume).width;
-
-        let novstr = Number(width.substr(0, width.length-2));
-
-        //audio.volume = event.clientX / novstr;
-
-        console.log(novstr)
-        console.log(event.clientX)
-        //volume.querySelector('.volume-bar-value').style.width = audio.volume * 100 + '%';
-
-    });
+    }
 
 
 
@@ -131,13 +225,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             this.classList.remove('active')
 
-            audio.volume = '1'
+            if (typeof mute.volumeRate === 'undefined'){
+                audio.volume = '1'
+
+            }else{
+                audio.volume = mute.volumeRate
+            }
+
+            volumeInside.style.width = audio.volume * 100 + '%'
 
         }else{
 
             this.classList.add('active')
-
+            mute.volumeRate = audio.volume
             audio.volume = '0'
+            volumeInside.style.width = audio.volume * 100 + '%'
 
         }
 
@@ -156,6 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if(document.querySelector('.item.active').classList.contains('pause')){
             document.querySelector('.item.active').classList.remove('pause')
         }
+
+        labelTrackArtistHeader()
 
         audio.play();
 
@@ -194,6 +298,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let next_item = old_active.nextElementSibling ? old_active.nextElementSibling : old_active.parentElement.firstElementChild
         next_item.classList.add('active')
 
+        labelTrackArtistHeader()
+
         audio.src = next_item.querySelector('[data-url]').getAttribute('data-url')
 
         audio.currentTime = 0;
@@ -211,6 +317,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let prev_item = old_active.previousElementSibling ? old_active.previousElementSibling : old_active.parentElement.lastElementChild
         prev_item.classList.add('active')
+
+        labelTrackArtistHeader()
 
         audio.src = prev_item.querySelector('[data-url]').getAttribute('data-url')
 
@@ -238,6 +346,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    function labelTrackArtistHeader(){
+
+        let trackName = document.querySelector('.item.active .description .track')
+        let artist = document.querySelector('.item.active .description .artist')
+
+        //сделать проверку на существование
+
+        //let target = document.querySelector('.track-name')
+        let targetArtist = document.querySelector('.track-name .artist')
+        let targetTrack= document.querySelector('.track-name .track')
+
+        targetArtist.innerText = artist.innerText
+        targetTrack.innerText = trackName.innerText
+        //target.style.visibility = 'visible'
+
+    }
 
 
 
@@ -670,13 +794,6 @@ function eventDeletePlaylist(){
 }
 
 eventDeletePlaylist()
-
-
-
-
-
-
-
 
 
 

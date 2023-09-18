@@ -36,7 +36,10 @@
                 </div>
 
                 <div class="group track-name">
-                    <span class="track">track</span> — <span class="artist">artist</span>
+                    <h3>
+                        <span class="artist">track</span>  —  <span class="track">artist</span>
+                    </h3>
+
                 </div>
 
                 <div class="group basic">
@@ -59,8 +62,8 @@
 
             <div class="progress">
                 <div class="seek-bar">
-                    <span class="currentTime">10</span>
-                    <span class="timeLeft">20</span>
+                    <span class="currentTime"></span>
+                    <span class="all-time"></span>
                     <div class="play-bar"></div>
                 </div>
             </div>

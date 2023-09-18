@@ -41,7 +41,7 @@ class Settings
         ],
         'text_disabled' => [],
         'date' => [],
-        'textarea' => ['video_text', 'video_content', 'global_sale', 'delivery_information', 'dop_content'],
+        'textarea' => ['video_text', 'video_content', 'global_sale', 'delivery_information', 'dop_content', 'text'],
         'file' => ['link'],
         'gallery_img' => ['payments_gallery_img'],
         'img' => ['first_img', 'second_img', 'dop_img', 'video_img'],
@@ -57,7 +57,8 @@ class Settings
     private $translate = [
 //        'site_url' => ['Ссылка на сайт'],
         'link' => ['Звуковой файл'],
-        'style_id' => ['Стиль музыки']
+        'style_id' => ['Стиль музыки'],
+        'text' => ['Текст песни'],
 
     ];
 
