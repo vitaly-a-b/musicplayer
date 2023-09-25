@@ -43,10 +43,12 @@ const USER_CSS_JS = [
     'styles' => [
         'assets/css/styles.css',
         'assets/css/modals.css',
+
     ],
     'scripts' => [
         'assets/js/script.js',
         'assets/js/send_form.js',
+
     ]
 ];
 

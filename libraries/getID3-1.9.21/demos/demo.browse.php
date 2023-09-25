@@ -256,7 +256,7 @@ if (isset($_REQUEST['filename'])) {
 			echo '<th>Format</th>';
 			echo '<th>Playtime</th>';
 			echo '<th>Bitrate</th>';
-			echo '<th>Artist</th>';
+			echo '<th>ArtistController</th>';
 			echo '<th>Title</th>';
 			if (isset($_REQUEST['ShowMD5']) && GETID3_DEMO_BROWSE_ALLOW_MD5_LINK) {
 				echo '<th>MD5&nbsp;File (File) (<a href="'.htmlentities($_SERVER['PHP_SELF'].'?listdirectory='.rawurlencode(isset($_REQUEST['listdirectory']) ? $_REQUEST['listdirectory'] : '.'), ENT_QUOTES | ENT_SUBSTITUTE, $PageEncoding).'">disable</a>)</th>';
@@ -344,7 +344,7 @@ if (isset($_REQUEST['filename'])) {
 					echo '<td align="right">&nbsp;'.NiceDisplayFiletypeFormat($fileinfo).'</td>';
 					echo '<td align="right">&nbsp;'.(isset($fileinfo['playtime_string']) ? $fileinfo['playtime_string'] : '-').'</td>';
 					echo '<td align="right">&nbsp;'.(isset($fileinfo['bitrate']) ? BitrateText($fileinfo['bitrate'] / 1000) : '-').'</td>';
-					echo '<td align="left">&nbsp;</td>'; // Artist
+					echo '<td align="left">&nbsp;</td>'; // ArtistController
 					echo '<td align="left">&nbsp;</td>'; // Title
 					echo '<td align="left" colspan="3">&nbsp;</td>'; // MD5_data
 					echo '<td align="left">&nbsp;</td>'; // Tags

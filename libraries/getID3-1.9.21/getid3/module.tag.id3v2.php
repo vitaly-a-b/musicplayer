@@ -3228,7 +3228,7 @@ class getid3_id3v2 extends getid3_handler
 			0x05 => 'Leaflet page',
 			0x06 => 'Media (e.g. label side of CD)',
 			0x07 => 'Lead artist/lead performer/soloist',
-			0x08 => 'Artist/performer',
+			0x08 => 'ArtistController/performer',
 			0x09 => 'Conductor',
 			0x0A => 'Band/Orchestra',
 			0x0B => 'Composer',
@@ -3420,12 +3420,12 @@ class getid3_id3v2 extends getid3_handler
 			TRK	Track number/Position in set
 			TRSN	Internet radio station name
 			TRSO	Internet radio station owner
-			TS2	Album-Artist sort order
+			TS2	Album-ArtistController sort order
 			TSA	Album sort order
 			TSC	Composer sort order
 			TSI	Size
 			TSIZ	Size
-			TSO2	Album-Artist sort order
+			TSO2	Album-ArtistController sort order
 			TSOA	Album sort order
 			TSOC	Composer sort order
 			TSOP	Performer sort order
@@ -3465,7 +3465,7 @@ class getid3_id3v2 extends getid3_handler
 			WPUB	Publishers official webpage
 			WXX	User defined URL link frame
 			WXXX	User defined URL link frame
-			TFEA	Featured Artist
+			TFEA	Featured ArtistController
 			TSTU	Recording Studio
 			rgad	Replay Gain Adjustment
 
@@ -3866,7 +3866,7 @@ class getid3_id3v2 extends getid3_handler
 			'TRC' => 'TSRC', // ISRC (international standard recording code)
 			'TRD' => 'TRDA', // Recording dates
 			'TRK' => 'TRCK', // Track number/Position in set
-			'TS2' => 'TSO2', // Album-Artist sort order
+			'TS2' => 'TSO2', // Album-ArtistController sort order
 			'TSA' => 'TSOA', // Album sort order
 			'TSC' => 'TSOC', // Composer sort order
 			'TSI' => 'TSIZ', // Size

@@ -49,7 +49,7 @@ if (isset($_POST['WriteTags'])) {
 			$tagwriter->remove_other_tags = true;
 		}
 
-		$commonkeysarray = array('Title', 'Artist', 'Album', 'Year', 'Comment');
+		$commonkeysarray = array('Title', 'ArtistController', 'Album', 'Year', 'Comment');
 		foreach ($commonkeysarray as $key) {
 			if (!empty($_POST[$key])) {
 				$TagData[strtolower($key)][] = $_POST[$key];
@@ -159,7 +159,7 @@ if (!empty($Filename)) {
 				break;
 		}
 		echo '<tr><td align="right"><b>Title</b></td> <td><input type="text" size="40" name="Title"  value="'.htmlentities((!empty($OldThisFileInfo['comments']['title'])  ? implode(', ', $OldThisFileInfo['comments']['title'] ) : ''), ENT_QUOTES).'"></td></tr>';
-		echo '<tr><td align="right"><b>Artist</b></td><td><input type="text" size="40" name="Artist" value="'.htmlentities((!empty($OldThisFileInfo['comments']['artist']) ? implode(', ', $OldThisFileInfo['comments']['artist']) : ''), ENT_QUOTES).'"></td></tr>';
+		echo '<tr><td align="right"><b>ArtistController</b></td><td><input type="text" size="40" name="ArtistController" value="'.htmlentities((!empty($OldThisFileInfo['comments']['artist']) ? implode(', ', $OldThisFileInfo['comments']['artist']) : ''), ENT_QUOTES).'"></td></tr>';
 		echo '<tr><td align="right"><b>Album</b></td> <td><input type="text" size="40" name="Album"  value="'.htmlentities((!empty($OldThisFileInfo['comments']['album'])  ? implode(', ', $OldThisFileInfo['comments']['album'] ) : ''), ENT_QUOTES).'"></td></tr>';
 		echo '<tr><td align="right"><b>Year</b></td>  <td><input type="text" size="4"  name="Year"   value="'.htmlentities((!empty($OldThisFileInfo['comments']['year'])   ? implode(', ', $OldThisFileInfo['comments']['year']  ) : ''), ENT_QUOTES).'"></td></tr>';
 

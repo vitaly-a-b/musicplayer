@@ -13,10 +13,10 @@ class SearchController extends BaseUser
     private $searchTables = ['track'];
 
     // колонки таблицы по которым искать
-    private $searchRows = ['name'];
+    private $searchRows = ['name', 'alias'];
 
     // в каком порядке искать
-    private $orderRows = ['name'];
+    private $orderRows = ['name', 'alias'];
     private $fields = [];
     private $returnQuery = false;
     private $noPagination = false;
@@ -43,6 +43,7 @@ class SearchController extends BaseUser
 
                 default:
                     $this->searchTables = ['track'];
+                    $this->searchRows[] = 'text';
                     break;
             }
         }
@@ -50,7 +51,7 @@ class SearchController extends BaseUser
 
         $result = $this->searchData();
 
-        if ($result && in_array('artist', $this->searchTables )){
+        if (!empty($result['data']) && in_array('artist', $this->searchTables )){
 
             $artId = array_column($result['data'], 'id');
 
@@ -70,8 +71,6 @@ class SearchController extends BaseUser
             $tracks = $result['data'] ?? null;
 
         }
-
-
 
         $pages = $result['pages'] ?? null;
 

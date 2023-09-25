@@ -970,7 +970,7 @@ class BaseUser extends BaseController
         if ($this->model->get('playlists_track', [
             'where'=> ['playlists_id' => $id]
         ])){
-
+            // удалятся записи в связанной таблице только при delete rule - cascade
             $set['join'] = [
                 [
                     'table' => 'playlists_track',
@@ -990,6 +990,7 @@ class BaseUser extends BaseController
         return ['success' => 1];
 
     }
+
 
 
 

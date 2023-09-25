@@ -35,6 +35,20 @@ trait ProjectHelper
 
         }
 
+        if (empty($vars['styles'])){
+
+            $where = [];
+
+            if (!empty($this->model->showColumns('style')['visible'])){
+                $where['visible'] = 1;
+            }
+
+            $vars['styles'] = $this->model->get('style', [
+                'where' => $where
+            ]);
+
+        }
+
         // если кешь есть то далее выполнять не нужно
         if ($this->dynamicCache){
             return;

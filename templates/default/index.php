@@ -28,20 +28,45 @@
                                         <span><?=!empty($track['duration']) ? (sprintf('%02d', floor($track['duration']/60)) . ':' . sprintf('%02d', $track['duration']%60)) : '' ?></span>
                                     </div>
 
-                                    <div class="download"></div>
+                                    <a href="<?=PATH . UPLOAD_DIR . $track['link']?>" download="<?=$track['artist_name']?> - <?=$track['name']?>.mp3" class="download" data-track-id="<?=$track['id']?>"></a>
+
                                     <?php if (!empty($playlists)):?>
                                         <div class="<?=isset($_GET['pl']) ? 'delete' : 'add'?>" data-track-id="<?=$track['id']?>"></div>
 
                                          <?php if (!isset($_GET['pl'])):?>
-                                            <div class="add-to-playlist">
-                                                <ul>
-                                                   <?php foreach ($playlists as $playlist):?>
-                                                        <li class="add-to-playlist-item" data-playlist-id="<?=$playlist['id']?>"><?=$playlist['name']?></li>
-                                                    <?php endforeach;?>
-                                                </ul>
-                                            </div>
+
+
+
+
+                                                <div class="modal-dialog add-to-playlist">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Выберите в какой плейлист добавить трек</h5>
+
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <ul>
+                                                                <?php foreach ($playlists as $playlist):?>
+                                                                    <li class="add-to-playlist-item" data-playlist-id="<?=$playlist['id']?>"><?=$playlist['name']?></li>
+                                                                <?php endforeach;?>
+                                                            </ul>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
                                          <?php endif;?>
                                     <?php endif;?>
+
+
+
                                 </li>
 
                             <?php endforeach;?>

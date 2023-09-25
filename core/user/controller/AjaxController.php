@@ -77,7 +77,6 @@ class AjaxController extends BaseUser
     }
 
 
-
     protected function userSearch(){
 
 

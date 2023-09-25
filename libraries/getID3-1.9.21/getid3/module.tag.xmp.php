@@ -572,7 +572,7 @@ $GLOBALS['XMP_tag_captions'] = array(
 	'tiff:Make',
 	'tiff:Model',
 	'tiff:Software',
-	'tiff:Artist',
+	'tiff:ArtistController',
 	'tiff:Copyright',
 	'exif:ExifVersion',
 	'exif:FlashpixVersion',

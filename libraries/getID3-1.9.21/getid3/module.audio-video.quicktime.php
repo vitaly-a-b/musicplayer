@@ -408,7 +408,7 @@ class getid3_quicktime extends getid3_handler
 				case 'rpdu': //
 				case 'rtng': // RaTiNG
 				case 'sfID': // iTunes store country
-				case 'soaa': // SOrt Album Artist
+				case 'soaa': // SOrt Album ArtistController
 				case 'soal': // SOrt ALbum
 				case 'soar': // SOrt ARtist
 				case 'soco': // SOrt COmposer
@@ -2762,9 +2762,9 @@ $this->warning('incomplete/incorrect handling of "stsd" with Parrot metadata in 
 			$handyatomtranslatorarray['replaygain_track_peak']       = 'replaygain_track_peak';
 			$handyatomtranslatorarray['replaygain_track_minmax']     = 'replaygain_track_minmax';
 			$handyatomtranslatorarray['MusicIP PUID']                = 'MusicIP PUID';
-			$handyatomtranslatorarray['MusicBrainz Artist Id']       = 'MusicBrainz Artist Id';
+			$handyatomtranslatorarray['MusicBrainz ArtistController Id']       = 'MusicBrainz ArtistController Id';
 			$handyatomtranslatorarray['MusicBrainz Album Id']        = 'MusicBrainz Album Id';
-			$handyatomtranslatorarray['MusicBrainz Album Artist Id'] = 'MusicBrainz Album Artist Id';
+			$handyatomtranslatorarray['MusicBrainz Album ArtistController Id'] = 'MusicBrainz Album ArtistController Id';
 			$handyatomtranslatorarray['MusicBrainz Track Id']        = 'MusicBrainz Track Id';
 			$handyatomtranslatorarray['MusicBrainz Disc Id']         = 'MusicBrainz Disc Id';
 

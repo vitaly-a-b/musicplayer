@@ -147,7 +147,7 @@ class getid3_tiff extends getid3_handler
 					case 272: // Model
 					case 305: // Software
 					case 306: // DateTime
-					case 315: // Artist
+					case 315: // ArtistController
 					case 316: // HostComputer
 						if (isset($fieldarray['value'])) {
 							$info['tiff']['ifd'][$IFDid]['fields'][$key]['raw']['data'] = $fieldarray['value'];
@@ -197,7 +197,7 @@ class getid3_tiff extends getid3_handler
 					case 272: // Model
 					case 305: // Software
 					case 306: // DateTime
-					case 315: // Artist
+					case 315: // ArtistController
 					case 316: // HostComputer
 						$TIFFcommentName = strtolower($fieldarray['raw']['tag_name']);
 						if (isset($info['tiff']['comments'][$TIFFcommentName])) {
@@ -318,7 +318,7 @@ class getid3_tiff extends getid3_handler
 				301 => 'TransferFunction',
 				305 => 'Software',
 				306 => 'DateTime',
-				315 => 'Artist',
+				315 => 'ArtistController',
 				316 => 'HostComputer',
 				317 => 'Predictor',
 				318 => 'WhitePoint',

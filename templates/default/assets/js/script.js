@@ -152,8 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!control.classList.contains('inited')){
 
-            let currentTimeElement = document.querySelector('.progress .seek-bar .currentTime')
-            let allTimeElement  = document.querySelector('.progress .seek-bar .all-time')
+            let currentTimeElement = document.querySelector('.line-progress .seek-bar .currentTime')
+            let allTimeElement  = document.querySelector('.line-progress .seek-bar .all-time')
 
             if (currentTimeElement && allTimeElement){
 
@@ -556,7 +556,7 @@ async function addTrack(e){
             throw new Error('значение playListId не число ')
         }
 
-        let trackElement = this.closest('.item').querySelector('[data-track-id]')
+        let trackElement = this.closest('.item').querySelector('.add[data-track-id]')
 
         if (!trackElement){
             throw new Error('нет элемента с атрибутом data-track-id')
@@ -578,14 +578,14 @@ async function addTrack(e){
 
         res = JSON.parse(res)
 
-        if(typeof res.error !== 'undefined' || typeof res.success === 'undefined'){
-            throw new Error(res.message || null)
-        }
-
         let divAddToPlaylist = this.closest('.add-to-playlist')
 
         if (divAddToPlaylist){
             divAddToPlaylist.classList.remove('active')
+        }
+
+        if(typeof res.error !== 'undefined' || typeof res.success === 'undefined'){
+            throw new Error(res.message || null)
         }
 
         trackElement.remove()
@@ -612,8 +612,28 @@ document.querySelectorAll('[data-track-id].delete, [data-track-id].add').forEach
     }
 
     if(item.classList.contains('add')){
-        item.addEventListener('click', function (){
-            this.nextElementSibling.classList.toggle('active')
+
+        item.addEventListener('click', function (e){
+            //e.stopPropagation()
+
+            let menu = this.nextElementSibling
+
+            if (menu){
+                menu.classList.toggle('active')
+
+                let btnClose = menu.querySelector('button.btn-secondary')
+
+                if (btnClose){
+
+                    btnClose.addEventListener('click', buttonClose)
+
+                    function buttonClose(){
+                        menu.classList.toggle('active')
+                        btnClose.removeEventListener('click', buttonClose)
+                    }
+                }
+            }
+
         })
 
         item.nextElementSibling.querySelectorAll('li.add-to-playlist-item').forEach(i => {
@@ -621,6 +641,7 @@ document.querySelectorAll('[data-track-id].delete, [data-track-id].add').forEach
         })
 
     }
+
 
 })
 
@@ -699,8 +720,26 @@ async function requestNewPlaylist(){
                 this.closest('.boxShadow.block-cont').append(parent)
                 parent.append(playlistElement)
 
-                // повешать обработчик на удаления плейлиста
-                eventDeletePlaylist()
+            }
+
+            // повешать обработчик на удаления плейлиста
+            eventDeletePlaylist()
+
+            let modalWin = document.querySelectorAll('.add-to-playlist')
+
+            if (modalWin.length){
+
+                for (let elem of modalWin){
+
+                    let ul = elem.querySelector('ul')
+                    let newLi = document.createElement('li')
+                    newLi.className = 'add-to-playlist-item'
+                    newLi.setAttribute('data-playlist-id', res.id)
+                    newLi.innerText = res.name
+                    ul.append(newLi)
+
+                    newLi.addEventListener('click', addTrack)
+                }
 
             }
 
@@ -769,6 +808,17 @@ async function deletePlaylist(){
                     element.remove()
                 }
 
+                let modalWin = document.querySelectorAll('.add-to-playlist')
+
+                if (modalWin.length){
+
+                    for (let elem of modalWin){
+                        let li = elem.querySelector(`[data-playlist-id="${id}"]`)
+                        li.removeEventListener('click', addTrack)
+                        li.remove()
+                    }
+
+                }
 
             })
         }
@@ -796,6 +846,17 @@ function eventDeletePlaylist(){
 eventDeletePlaylist()
 
 
+
+document.querySelectorAll('.burger').forEach(item => {
+    item.addEventListener('click', function (){
+
+        let sideBar = document.querySelector('.desktop-sidebar')
+
+        if (sideBar){
+          sideBar.classList.toggle('active')
+        }
+    })
+})
 
 
 

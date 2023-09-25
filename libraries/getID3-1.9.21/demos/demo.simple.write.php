@@ -39,7 +39,7 @@ $tagwriter->remove_other_tags = true;
 // populate data array
 $TagData = array(
 	'title'                  => array('My Song'),
-	'artist'                 => array('The Artist'),
+	'artist'                 => array('The ArtistController'),
 	'album'                  => array('Greatest Hits'),
 	'year'                   => array('2004'),
 	'genre'                  => array('Rock'),

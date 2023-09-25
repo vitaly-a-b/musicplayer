@@ -499,7 +499,7 @@ class getid3_flac extends getid3_handler
 			 5 => 'Leaflet page',
 			 6 => 'Media (e.g. label side of CD)',
 			 7 => 'Lead artist/lead performer/soloist',
-			 8 => 'Artist/performer',
+			 8 => 'ArtistController/performer',
 			 9 => 'Conductor',
 			10 => 'Band/Orchestra',
 			11 => 'Composer',

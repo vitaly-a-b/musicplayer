@@ -50,10 +50,8 @@ class IndexController extends BaseUser
                                     'artist' => [
                                         'fields' => ['name as artist_name'],
                                         'on' => ['parent_id' => 'id'],
-                                        //'single' => true
                                     ]
                                 ],
-                                //'join_structure' =>true
                             ]);
                         }
 
@@ -64,20 +62,76 @@ class IndexController extends BaseUser
 
         }
 
+        if (!empty($_GET['artist'])) {
+
+            $_GET['artist'] = $this->clearStr($_GET['artist']);
+
+            $where = [];
+
+            if (!empty($this->model->showColumns('artist')['visible'])){
+                $where['visible'] = 1;
+            }
+
+            $where['parent_id'] = $this->model->get('artist', [
+                'fields' => ['id'],
+                'where' => ['alias' => $_GET['artist']],
+                'return_query' => true
+            ]);
+
+            $tracks = $this->model->get('track', [
+                'where' => $where,
+                'join' => [
+                    'artist' => [
+                        'fields' => ['name as artist_name'],
+                        'on' => ['parent_id' => 'id'],
+                    ]
+                ],
+            ]);
+
+
+        }
+
+        if (!empty($_GET['genre'])) {
+
+            $_GET['genre'] = $this->clearStr($_GET['genre']);
+
+            $where = [];
+
+            if (!empty($this->model->showColumns('style')['visible'])){
+                $where['visible'] = 1;
+            }
+
+            $where['style_id'] = $this->model->get('style', [
+                'fields' => ['id'],
+                'where' => ['alias' => $_GET['genre']],
+                'return_query' => true
+            ]);
+
+            $tracks = $this->model->get('track', [
+                'where' => $where,
+                'join' => [
+                    'artist' => [
+                        'fields' => ['name as artist_name'],
+                        'on' => ['parent_id' => 'id'],
+                    ]
+                ],
+            ]);
+
+
+        }
+
 
         if (!$tracks && (empty($this->userData) || (!empty($this->userData) && empty($_GET['pl'])))){
 
             $tracks = $this->model->get('track', [
                 'where' => ['visible' => 1],
-                'limit' => 20,
+                'limit' => 50,
                 'join' => [
                     'artist' => [
                         'fields' => ['name as artist_name'],
                         'on' => ['parent_id' => 'id'],
-                        //'single' => true
                     ]
                 ],
-                //'join_structure' =>true
             ]);
         }
 

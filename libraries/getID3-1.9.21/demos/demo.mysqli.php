@@ -1401,7 +1401,7 @@ if (!empty($_REQUEST['scan']) || !empty($_REQUEST['newscan']) || !empty($_REQUES
 			// remove empty parenthesized pairs (probably where no track numbers, remix version, etc)
 			$PatternFilename = preg_replace('#'.preg_quote($pair).'#', '', $PatternFilename);
 
-			// "[01]  - Title With No Artist.mp3"  ==>  "[01] Title With No Artist.mp3"
+			// "[01]  - Title With No ArtistController.mp3"  ==>  "[01] Title With No ArtistController.mp3"
 			$PatternFilename = preg_replace('#'.preg_quote($pair[1]).' +\- #', $pair[1].' ', $PatternFilename);
 
 		}
@@ -1683,7 +1683,7 @@ if (!empty($_REQUEST['scan']) || !empty($_REQUEST['newscan']) || !empty($_REQUES
 		echo 'Duplicated aritst + title: (<a href="'.htmlentities($_SERVER['PHP_SELF'].'?artisttitledupes=1&samemix=1').'">Identical Mix/Version only</a>)<br>';
 		echo '(<a href="'.htmlentities($_SERVER['PHP_SELF'].'?artisttitledupes=1&m3u=.m3u').'">.m3u version</a>)<br>';
 		echo '<table border="1" cellspacing="0" cellpadding="2">';
-		echo '<tr><th colspan="3">&nbsp;</th><th>Artist</th><th>Title</th><th>Version</th><th>&nbsp;</th><th>&nbsp;</th><th>Filename</th></tr>';
+		echo '<tr><th colspan="3">&nbsp;</th><th>ArtistController</th><th>Title</th><th>Version</th><th>&nbsp;</th><th>&nbsp;</th><th>Filename</th></tr>';
 
 		while (($row = mysqli_fetch_array($result)) && ($row['num'] > 1)) {
 			$uniquetitles++;

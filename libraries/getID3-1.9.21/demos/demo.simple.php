@@ -29,7 +29,7 @@ $getID3 = new getID3;
 $DirectoryToScan = '/change/to/directory/you/want/to/scan'; // change to whatever directory you want to scan
 $dir = opendir($DirectoryToScan);
 echo '<table border="1" cellspacing="0" cellpadding="3">';
-echo '<tr><th>Filename</th><th>Artist</th><th>Title</th><th>Bitrate</th><th>Playtime</th></tr>';
+echo '<tr><th>Filename</th><th>ArtistController</th><th>Title</th><th>Bitrate</th><th>Playtime</th></tr>';
 while (($file = readdir($dir)) !== false) {
 	$FullFileName = realpath($DirectoryToScan.'/'.$file);
 	if ((substr($file, 0, 1) != '.') && is_file($FullFileName)) {

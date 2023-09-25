@@ -9,6 +9,9 @@
             <li class="pinned">
                 <a href="<?=$this->alias('artist')?>"><?=$this->translateEl('Исполнители')?></a>
             </li>
+            <li class="pinned">
+                <a href="<?=$this->alias('')?>"><?=$this->translateEl('Коллекция')?></a>
+            </li>
 
         </ul>
 
@@ -24,8 +27,8 @@
         <?php else:?>
 
             <div class="create-new-playlist boxShadow">
-                <button>создать новый плейлист</button>
-                <div class="menu-create-playlist">
+                <button>Создать новый плейлист</button>
+                <div class="menu-create-playlist boxShadow">
                     <div>
                         <input type="text" placeholder="Введите название плейлиста">
                     </div>
@@ -57,27 +60,27 @@
 
     </div>
 
-    <div class="boxShadow">
+    <?php if (!empty($styles)): ?>
+        <div class="boxShadow">
 
-        <h3>Жанры
-            <span class="showAll"></span>
-        </h3>
+            <h3>Жанры
+                <span class="showAll"></span>
+            </h3>
 
-        <ul class="genre">
+            <ul class="genre">
 
-            <li class="pinned">
-                <a href="">Шансон</a>
-            </li>
+                <?php foreach ($styles as $style): ?>
 
-            <li class="pinned">
-                <a href="">Шансон</a>
-            </li>
-            <li class="pinned">
-                <a href="">Шансон</a>
-            </li>
+                    <li class="pinned">
+                        <a href="<?=$this->alias('', 'genre='. $style['alias'])?>"><?=$style['name']?></a>
+                    </li>
+
+                <?php endforeach;?>
 
 
-        </ul>
-    </div>
+
+            </ul>
+        </div>
+    <?php endif; ?>
 
 </div>
