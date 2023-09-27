@@ -3,10 +3,6 @@
     <div class="boxShadow">
         <ul class="menu-box">
             <li class="pinned">
-                <a href="https://muzofond.fm/popular">
-                    Жанры                </a>
-            </li>
-            <li class="pinned">
                 <a href="<?=$this->alias('artist')?>"><?=$this->translateEl('Исполнители')?></a>
             </li>
             <li class="pinned">

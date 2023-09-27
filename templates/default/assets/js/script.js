@@ -304,8 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         let num = Math.floor(Math.random() * list.length)
                         list[num].classList.add('active')
 
-                        console.log(num + ', ' + list[num])
-
                         labelTrackArtistHeader()
 
                         audio.src = list[num].querySelector('[data-url]').getAttribute('data-url')
@@ -898,7 +896,7 @@ eventDeletePlaylist()
 document.querySelectorAll('.burger').forEach(item => {
     item.addEventListener('click', function (){
 
-        let sideBar = document.querySelector('.desktop-sidebar')
+        let sideBar = document.querySelector('.content')
 
         if (sideBar){
           sideBar.classList.toggle('active')
