@@ -61,7 +61,7 @@
     </div>
 
     <?php if (!empty($styles)): ?>
-        <div class="boxShadow">
+        <div class="boxShadow style-genre">
 
             <h3>Жанры
                 <span class="showAll"></span>

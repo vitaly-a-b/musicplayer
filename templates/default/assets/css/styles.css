@@ -136,7 +136,7 @@ header {
 }
 
 .player-controls .prev {
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) 0 0 no-repeat;
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) 0 0 no-repeat;
     width: 29px;
     height: 29px
 }
@@ -147,7 +147,7 @@ header {
 }
 
 .player-controls .next {
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -126px 0 no-repeat;
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -126px 0 no-repeat;
     width: 29px;
     height: 29px
 }
@@ -164,7 +164,7 @@ header {
 }
 
 .player-controls .play {
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -42px 0 no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -42px 0 no-repeat
 }
 
 .player-controls.playing .play {
@@ -173,14 +173,14 @@ header {
 
 
 .player-controls .pause {
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -84px 0 no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -84px 0 no-repeat
 }
 
 .player-controls .repeat {
     cursor: pointer;
     width: 29px;
     height: 29px;
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -168px 0 no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -168px 0 no-repeat
 }
 
 .player-controls .repeat:hover {
@@ -188,14 +188,14 @@ header {
 }
 
 .player-controls .repeat.active {
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -168px -42px no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -168px -42px no-repeat
 }
 
 .player-controls .shuffle {
     cursor: pointer;
     width: 29px;
     height: 29px;
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -210px 0 no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -210px 0 no-repeat
 }
 
 .player-controls .shuffle:hover {
@@ -203,7 +203,7 @@ header {
 }
 
 .player-controls .shuffle.active {
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -210px -42px no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -210px -42px no-repeat
 }
 
 .mute {
@@ -211,7 +211,7 @@ header {
     cursor: pointer;
     height: 29px;
     width: 29px;
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -336px 0 no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -336px 0 no-repeat
 }
 
 .player-controls .mute:hover {
@@ -219,7 +219,7 @@ header {
 }
 
 .player-controls .mute.active {
-    background: url(http://playmusic/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -336px -84px no-repeat
+    background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -336px -84px no-repeat
 }
 
 .volume{
@@ -276,7 +276,7 @@ main .container{
 .inInputSearch{
     position: relative;
     border: 1px solid #878a85;
-    border-radius: 3px;
+    border-radius: 7px;
 }
 
 
@@ -296,10 +296,14 @@ main .container{
     height: 37px;
     width: 91px;
     font-size: 16px;
-    background-color: #007da3;
+    background-color: #d4e6a7;
     color: black;
     font-weight: bold;
     border: none;
+}
+
+.inInputSearch button:hover{
+    background-color: green;
 }
 
 .inInputSearch select{
@@ -391,6 +395,7 @@ li.playlist-item .delete{
 
 li.playlist-item.active a{
     color: #007da3;
+    font-weight: bold;
 }
 
 .icon-user{
@@ -511,6 +516,11 @@ ul.artist{
 }
 
 
+.menu-box{
+    font-weight: bold;
+}
+
+
 
 @media (max-width: 1100px) {
 
@@ -551,9 +561,12 @@ ul.artist{
     .desktop-sidebar{
         position: fixed;
         right: 0;
-        width: 310px;;
+        top: 123px;
+        width: calc(100% - 10px);
+        max-height: calc(100% - 126px);
+        overflow: auto;
         background-color: #d4e6a7;
-        padding: 5px;
+        padding: 3px;
         border-radius: 10px;
         margin: 5px;
         transform: translateX(100%);
@@ -567,6 +580,9 @@ ul.artist{
 
     .centerMain{
         width: 100%;
+        background-color: #d4e6a7;
+        padding: 3px;
+        border-radius: 10px;
     }
 
     .content{
@@ -635,6 +651,41 @@ ul.artist{
         right: 0;
         width: 50%;
     }
+
+    .player-controls .group.basic {
+        justify-content: right;
+
+    }
+
+    .group.additional{
+        justify-content: left;
+    }
+
+    .group > div{
+        margin-right: 3px;
+    }
+
+    .item-artist img{
+        width: 140px;
+        height: 140px;
+    }
+
+    .item-artist{
+        max-width: 140px;
+    }
+
+    .searchArtist{
+        display: none;
+    }
+
+    .style-genre{
+        /*display: none;*/
+    }
+
+    .desktop-sidebar{
+
+    }
+
 
 }
 

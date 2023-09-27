@@ -16,20 +16,20 @@
 
     <header class="header">
 
-        <audio id="player_from_mejs" src="" preload="none" type="audio/mp3" class="hide"></audio>
+        <audio id="audio" src="" preload="none" type="audio/mp3" class="hide"></audio>
 
         <div class="container">
 
 
             <div class="player-controls inited">
 
-                <div class="group additional  closed">
+                <div class="group additional">
                     <div class="repeat"></div>
                     <div class="shuffle"></div>
                     <div class="volume">
-                        <div class="mute"></div>
+                        <div class="mute <?=isset($_SESSION['mute']) && $_SESSION['mute'] === true ? 'active' : '' ?>"></div>
                         <div class="volume-bar">
-                            <div class="volume-bar-value" style="width: 90%;"></div>
+                            <div class="volume-bar-value" style="width: <?=isset($_SESSION['volume']) ? (string)round($_SESSION['volume']*100)  : 90?>%;"></div>
                         </div>
                     </div>
 

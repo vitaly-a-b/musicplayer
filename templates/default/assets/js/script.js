@@ -1,27 +1,38 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const audio = document.querySelector('#player_from_mejs')
+    const audio = document.querySelector('#audio')
 
-    let time = document.querySelector('.play-bar')
-    let audiotrack = document.querySelector('.seek-bar')
+    const time = document.querySelector('.play-bar')
+    const audiotrack = document.querySelector('.seek-bar')
 
     const volume = document.querySelector('.volume-bar')
-    let volumeInside = document.querySelector('.volume-bar-value')
-    let mute = document.querySelector('.mute')
+    const volumeInside = document.querySelector('.volume-bar-value')
+    const mute = document.querySelector('.mute')
 
-    let control = document.querySelector('.player-controls')
+    const control = document.querySelector('.player-controls')
 
-    let prev = document.querySelector('.prev')
-    let next = document.querySelector('.next')
-    let pause = document.querySelector('.pause')
-    let play = document.querySelector('.basic .play')
+    const prev = document.querySelector('.prev')
+    const next = document.querySelector('.next')
+    const pause = document.querySelector('.pause')
 
-    let repeat = document.querySelector('.repeat')
+    const repeat = document.querySelector('.repeat')
+    const shuffle = document.querySelector('.shuffle')
 
     let audioPlay;
 
-    let track = 0
+
+    if (volumeInside && mute){
+        audio.volume = mute.volumeRate = +volumeInside.style.width.replace(/%/g, '')/100
+    }
+
+    if (mute && mute.classList.contains('active')){
+        audio.volume = 0
+        volumeInside.style.width = 0
+    }
+
+
+
 
 
     let el = document.querySelectorAll('.play')
@@ -98,13 +109,17 @@ document.addEventListener('DOMContentLoaded', () => {
     repeat.addEventListener('click', function (){
 
         if(!this.classList.contains('active')){
-
             this.classList.add('active')
+            shuffle.classList.contains('active') && shuffle.classList.remove('active')
 
         }else{
-
             this.classList.remove('active')
         }
+    })
+
+    shuffle.addEventListener('click', function (){
+        this.classList.toggle('active')
+        repeat.classList.contains('active') && repeat.classList.remove('active')
 
     })
 
@@ -209,6 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function volumeControl(event){
 
+        mute.classList.contains('active') && mute.classList.remove('active')
+
         let cordVolume =  volume.getBoundingClientRect()
         audio.volume = (event.clientX - cordVolume.x)/cordVolume.width
         volumeInside.style.width = audio.volume * 100 + '%'
@@ -266,20 +283,37 @@ document.addEventListener('DOMContentLoaded', () => {
         audioPlay = setInterval(function(){
 
             let audioTime = Math.round(audio.currentTime);
-
             let audioLength = Math.round(audio.duration);
 
             time.style.width = (audioTime * 100) / audioLength + '%';
 
             if (audioTime === audioLength){
 
-                if(document.querySelector('.repeat.active')){
-
+                if(repeat.classList.contains('active')) {
                     audio.currentTime = 0;
                     audio.play();
 
-                }else{
+                }else if (shuffle.classList.contains('active')){
 
+                    let list =  document.querySelectorAll('.item')
+
+                    if (list.length){
+                        let old_active = document.querySelector('.item.active')
+                        old_active.classList.remove('active')
+
+                        let num = Math.floor(Math.random() * list.length)
+                        list[num].classList.add('active')
+
+                        console.log(num + ', ' + list[num])
+
+                        labelTrackArtistHeader()
+
+                        audio.src = list[num].querySelector('[data-url]').getAttribute('data-url')
+                        audio.currentTime = 0;
+                        audio.play();
+                    }
+
+                }else{
                     nextTrack()
 
                 }
@@ -362,6 +396,20 @@ document.addEventListener('DOMContentLoaded', () => {
         //target.style.visibility = 'visible'
 
     }
+
+
+
+    document.addEventListener("visibilitychange", function() {
+
+        let data = {
+            volume: mute.classList.contains('active') ? mute.volumeRate : audio.volume,
+            mute: mute.classList.contains('active')
+        }
+
+        if (document.visibilityState === "hidden") {
+            navigator.sendBeacon("/inform", JSON.stringify(data));
+        }
+    });
 
 
 
@@ -863,8 +911,15 @@ document.querySelectorAll('.burger').forEach(item => {
 
 
 
+/*
+window.addEventListener('unload', function () {
 
+    let data = {
+        volume: 'audio.volume',
+    }
 
+    navigator.sendBeacon('/artist/log', JSON.stringify(data));
+});*/
 
 
 
