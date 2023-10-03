@@ -52,7 +52,7 @@
 
             </div>
 
-            <div class="lk">
+            <div class="lk" title="<?=!empty($this->userData) ? $this->translateEl('Разрегистрироваться') : 'Вход или регистрация' ?>">
                 <a href="<?=$this->alias(['login'=> 'logout'])?>" class="header-interaction-item " <?=!$this->userData ? 'data-modal-w="lk"' : ''?>>
                     <div class="icon-user"></div>
                     <span class="header-divisions-item-text"><?=$this->userData['name'] ?? $this->translateEl('Вход / регистрация') ?></span>

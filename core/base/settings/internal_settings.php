@@ -13,7 +13,7 @@ const BLOCK_TIME = 3;
 
 const END_SLASH = '/';
 
-const _QTY = 15;
+const _QTY = 24;
 const QTY_LINKS = 3;
 
 const CART = 'cookie';

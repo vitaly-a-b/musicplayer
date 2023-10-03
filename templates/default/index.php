@@ -60,8 +60,6 @@
                                                 </div>
 
 
-
-
                                          <?php endif;?>
                                     <?php endif;?>
 
@@ -76,6 +74,17 @@
 
                     <?php elseif ($this->getController() === 'search'):?>
                         <span>Ничего не найденно</span>
+                    <?php endif;?>
+
+
+                    <?php if(!empty($pages)): ?>
+                        <div class="pagination">
+
+                            <div class="pagination-description">
+                                <?php $this->pagination($pages) ?>
+                            </div>
+
+                        </div>
                     <?php endif;?>
 
                 </div>

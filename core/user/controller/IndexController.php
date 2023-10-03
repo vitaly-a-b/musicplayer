@@ -13,6 +13,9 @@ class IndexController extends BaseUser
         $tracks = [];
         $playlists = null;
 
+        $pagination = $this->clearNum($_GET['page'] ?? 1) ?? 1;
+
+
         if (!empty($this->userData)){
 
             $playlists = $this->model->get('playlists', [
@@ -46,6 +49,7 @@ class IndexController extends BaseUser
 
                             $tracks = $this->model->get('track', [
                                 'where' => ['visible' => 1, '{IN}id' => $data],
+                                'pagination' => $pagination,
                                 'join' => [
                                     'artist' => [
                                         'fields' => ['name as artist_name'],
@@ -80,6 +84,7 @@ class IndexController extends BaseUser
 
             $tracks = $this->model->get('track', [
                 'where' => $where,
+                'pagination' => $pagination,
                 'join' => [
                     'artist' => [
                         'fields' => ['name as artist_name'],
@@ -109,6 +114,7 @@ class IndexController extends BaseUser
 
             $tracks = $this->model->get('track', [
                 'where' => $where,
+                'pagination' => $pagination,
                 'join' => [
                     'artist' => [
                         'fields' => ['name as artist_name'],
@@ -123,9 +129,15 @@ class IndexController extends BaseUser
 
         if (!$tracks && (empty($this->userData) || (!empty($this->userData) && empty($_GET['pl'])))){
 
+            $where = [];
+
+            if (!empty($this->model->showColumns('track')['visible'])){
+                $where['visible'] = 1;
+            }
+
             $tracks = $this->model->get('track', [
-                'where' => ['visible' => 1],
-                'limit' => 50,
+                'where' => $where,
+                'pagination' => $pagination,
                 'join' => [
                     'artist' => [
                         'fields' => ['name as artist_name'],
@@ -135,7 +147,9 @@ class IndexController extends BaseUser
             ]);
         }
 
-        return compact('tracks', 'playlists');
+        $pages = $this->model->getPagination();
+
+        return compact('tracks', 'playlists', 'pages');
     }
 
 }

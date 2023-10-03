@@ -16,11 +16,13 @@ class SearchController extends BaseUser
     private $searchRows = ['name', 'alias'];
 
     // в каком порядке искать
-    private $orderRows = ['name', 'alias'];
-    private $fields = [];
+    private $orderRows = [];
+    private $fields = ['id'];
     private $returnQuery = false;
-    private $noPagination = false;
+    private $noPagination = true;
     public $callBack = null;
+
+    private $var = null;
 
 
 
@@ -42,43 +44,93 @@ class SearchController extends BaseUser
                     break;
 
                 default:
-                    $this->searchTables = ['track'];
+                    $this->searchTables = ['track', 'artist'];
                     $this->searchRows[] = 'text';
                     break;
             }
         }
 
-
         $result = $this->searchData();
 
-        if (!empty($result['data']) && in_array('artist', $this->searchTables )){
+        $where = [];
+        $condition = [];
+        $tracks = null;
 
-            $artId = array_column($result['data'], 'id');
+        if ($result['data']){
+
+            foreach ($this->searchTables as $item){
+
+                $this->var = $item;
+
+                $arr = array_filter($result['data'], function ($el){
+
+                    if (isset($el['table_name']) && $el['table_name'] === $this->var){
+                        return true;
+                    }
+
+                    return false;
+
+                }, ARRAY_FILTER_USE_BOTH);
+
+                if ($arr){
+
+                    switch ($item){
+
+                        case 'track':
+                            $where['id'] = array_column($arr, 'id');
+                            break;
+
+                        case 'artist':
+                            $where['parent_id'] = array_column($arr, 'id');
+                            break;
+
+                    }
+
+                }
+
+            }
+
+            if (($count = count($where)) >1){
+
+                $keys = array_keys($where);
+                $keys[0] = '(' . $keys[0];
+                $keys[$count-1] = ')' . $keys[$count-1];
+
+                $where = array_combine($keys, array_values($where));
+
+                for ($i=0; $i<$count-1; $i++){
+                    $condition[] = 'OR';
+                }
+
+            }
+
+
+            if (!empty($this->model->showColumns('track')['visible'])){
+                $where['visible'] = 1;
+                $condition[] = 'AND';
+            }
+
+            $pagination = $this->clearNum($_GET['page'] ?? 1) ?? 1;
 
             $tracks = $this->model->get('track', [
-                'where' => ['visible' => 1, '{IN}parent_id' => $artId ],
+                'where' => $where,
+                'condition' => $condition,
+                'pagination' => $pagination,
                 'join' => [
                     'artist' => [
                         'fields' => ['name as artist_name'],
                         'on' => ['parent_id' => 'id'],
-                        //'single' => true
                     ]
                 ],
-                //'join_structure' =>true
             ]);
-
-        }else{
-            $tracks = $result['data'] ?? null;
 
         }
 
-        $pages = $result['pages'] ?? null;
-
-        $totalCount = $result['totalCount'] ?? 0;
+        $pages = $this->model->getPagination();
 
         $this->template = TEMPLATE .'index';
 
-        return compact('tracks', 'pages', 'totalCount');
+        return compact('tracks', 'pages');
 
     }
 
@@ -106,15 +158,6 @@ class SearchController extends BaseUser
 
         // строка с поисковым запросом разбивается в массив по пробелу, т.е каждый элемент это отдельное слово
         $arr = preg_split('/\s+/', $search, 0, PREG_SPLIT_NO_EMPTY);
-
-        // первые два слова объединяем в один элемент массива
-        if(count($arr) >= 2){
-
-            $arr[0] .= ' ' . $arr[1];
-            unset($arr[1]);
-            $arr = array_values($arr);
-
-        }
 
         //массив с поисковым запросом
         $searchArr = [];
@@ -148,6 +191,7 @@ class SearchController extends BaseUser
 
                 if($this->fields){
                     $fields = $this->fields[$table] ?? $this->fields;
+                    $fields[] =  "('$table') AS table_name";
 
                 }elseif (!empty($this->model->goodsTable) && $this->model->goodsTable === $table){
                     $orderByGoodsTableName = true;
@@ -156,7 +200,7 @@ class SearchController extends BaseUser
 
                 $this->model->buildUnion($table, [
                    'fields' => $fields,
-                   'no_concat' => true,
+                   //'no_concat' => true,
                     'where' => $where
                 ]);
             }
@@ -284,6 +328,7 @@ class SearchController extends BaseUser
         }
 
     }
+
 
 
 }
