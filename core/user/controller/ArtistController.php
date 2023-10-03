@@ -15,15 +15,20 @@ class ArtistController extends BaseUser
         $artists = [];
         $where = [];
 
+        $pagination = $this->clearNum($_GET['page'] ?? 1) ?? 1;
+
         if (!empty($this->model->showColumns('artist')['visible'])){
             $where['visible'] = 1;
         }
 
         $artists = $this->model->get('artist', [
-            'where' => $where
+            'where' => $where,
+            'pagination' => $pagination,
         ]);
 
-        return compact('artists');
+        $pages = $this->model->getPagination();
+
+        return compact('artists', 'pages');
 
     }
 
