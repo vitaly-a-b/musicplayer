@@ -13,7 +13,9 @@ const BLOCK_TIME = 3;
 
 const END_SLASH = '/';
 
+
 const _QTY = 36;
+
 const QTY_LINKS = 3;
 
 const CART = 'cookie';
