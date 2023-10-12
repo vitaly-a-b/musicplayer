@@ -15,20 +15,76 @@ class ImportController extends BaseAdmin
     protected $artistTable = 'artist';
     protected $trackTable = 'track';
     protected $styleTable = 'style';
+    private $directory = null;
 
 
     protected function inputData()
     {
 
         set_time_limit(0);
+        $flagAddFiles = false;
 
         if (empty($_FILES['import']['name'][0])){
 
-            $_SESSION['res']['answer'] = '<div class="error">Нет загруженных файлов</div>';
+            $data = file_get_contents("php://input");
 
-            if ($this->redirect) {
-                $this->redirect();
+            if ($data){
+                $flagAddFiles = true;
+                preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
+                $boundary = $matches[1];
+                $array = preg_split("/--$boundary/", $data, 0,PREG_SPLIT_NO_EMPTY);
+
+                foreach ($array as $block){
+
+                    if (empty($block))
+                        continue;
+
+                    if (strpos($block, 'artist') !== false) {
+                        preg_match('/name=\"([^\"]+)\"[\n|\r]+([^\n\r].*?)?\r$/s', $block, $matches);
+                        !empty($matches[2]) && $_POST['artist'][] = $matches[2];
+
+                    }elseif (strpos($block, 'style') !== false){
+                        preg_match('/name=\"([^\"]+)\"[\n|\r]+([^\n\r].*?)?\r$/s', $block, $matches);
+                        !empty($matches[2]) && $_POST['style'][] = $matches[2];
+
+                    }else {
+                        preg_match('/filename=\"([^\"]*)\"[\n|\r]+([^\n\r].*?)?[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
+
+                        if ($matches){
+
+                            $_FILES['import']['name'][] = $matches[1] ?? 'unknown';
+                            $_FILES['import']['tmp_name'][] = $this->setTemporaryDirectory() . ($matches[1] ?? 'unknown');
+                            $_FILES['import']['type'][] = preg_match('/Content-Type:\s*(.*)$/', $matches[2] ?? '', $mat) ? $mat[1] : '';
+
+                            if ($file = fopen($this->setTemporaryDirectory() . $matches[1], 'ab')){
+
+                                $size = fwrite($file, $matches[3]);
+
+                                if (!$size){
+                                    throw new \Exception('Ошибка записи в файл');
+                                }
+
+                                $_FILES['import']['size'][] = $size;
+                                $_FILES['import']['error'][] = 0;
+
+                                fclose($file);
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }else{
+
+                $_SESSION['res']['answer'] = '<div class="error">Нет загруженных файлов</div>';
+
+                if ($this->redirect) {
+                    $this->redirect();
+                }
             }
+
         }
 
         parent::inputData();
@@ -139,6 +195,8 @@ class ImportController extends BaseAdmin
 
                 }
 
+                // если данных о названии трэка и исполнителе достать из атрибутов файла не удалось, то используем имя файла
+                // первая часть до "-" это исполнитель, вторая название трэка
                 if (empty($fields[$i]['name']) || !$checkArtist){
 
                     //отделяем расширение файла от его имени
@@ -155,11 +213,11 @@ class ImportController extends BaseAdmin
 
                     if (count($arr) === 2){
 
-                        $arr['artist'] =  preg_replace('/(^[_\s]+)|([_\s]+$)/', '', $arr[0]);
+                        $arr['artist'] =  preg_replace('/(^[_\s\d]+)|([_\s]+$)/', '', $arr[0]);
                         $arr['track'] =  preg_replace('/(^[_\s]+)|([_\s]+$)/', '', $arr[1]);
 
                     }else{
-                        $arr['track'] =  preg_replace('/(^[_\s]+)|([_\s]+$)/', '', $arr[0]);
+                        $arr['track'] =  preg_replace('/(^[_\s\d]+)|([_\s]+$)/', '', $arr[0]);
                     }
 
                     if (!$fields[$i]['name']){
@@ -203,6 +261,11 @@ class ImportController extends BaseAdmin
                 }
 
             }
+
+            if ($flagAddFiles){
+                $this->clearDir($this->directory);
+            }
+
 
             $res = $this->model->add($this->trackTable, [
                 'fields' => $fields,
@@ -280,6 +343,70 @@ class ImportController extends BaseAdmin
         }
 
         return $str;
+
+    }
+
+
+
+
+    protected function setTemporaryDirectory($dir = ''){
+
+        if (!$this->directory){
+
+            if ($dir){
+
+                if (stripos($dir, $_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR) === false){
+                    $dir = $_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $dir . '/';
+                }
+
+                $dir = preg_replace('/\/{2,}/', '/', $dir);
+
+            }else{
+
+                $dir = $_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . 'temporary/';
+
+            }
+
+            $this->directory = $dir;
+
+            if (!is_dir($dir)){
+
+                if (!mkdir($this->directory, 0777, true)){
+                    $this->directory = false;
+                }
+            }
+        }
+
+        return $this->directory;
+    }
+
+
+
+    protected function clearDir($dir){
+
+        !preg_match('/\/$/', $dir) && $dir .= '/';
+
+        $list = scandir($dir);
+
+        if ($list){
+
+            foreach ($list as $file){
+
+                if ($file !== '.' && $file !== '..'){
+
+                    if (is_dir($dir . $file)){
+
+                        $this->clearDir($dir . $file);
+                        @rmdir($dir . $file);
+
+                    }else{
+
+                        @unlink($dir . $file);
+
+                    }
+                }
+            }
+        }
 
     }
 

@@ -196,11 +196,21 @@ class FileEdit{
 
     protected function uploadFile($tmpName, $dest){
 
-        if(move_uploaded_file($tmpName, $dest)) return true;
+
+        if(move_uploaded_file($tmpName, $dest)){
+            return true;
+        }
+
+        if (!is_uploaded_file($tmpName)){
+            copy($tmpName, $dest);
+            return true;
+        }
 
         return false;
 
     }
+
+
 
     public function setDirectory($directory = ''){
 
