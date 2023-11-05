@@ -1,7 +1,6 @@
 
 <div class="module-search">
-
-    <form id="main-search" action="<?=$this->alias('search')?>" method="get" data-form-search>
+    <form id="main-search" action="<?=$this->alias('search')?>" method="get" data-form-search="search">
         <div class="form">
             <div class="inputSearch">
                 <div class="inInputSearch">
@@ -10,15 +9,11 @@
                         <select name="choice" class="searchArtist form-select form-select-sm">
                             <option value="name">По названию</option>
                             <option value="artist">По исполнителю</option>
-
                         </select>
                         <button class="btn btn-primary btn-lg" title="Начать поиск музыки" type="submit">Найти</button>
                     </div>
-                    <div class="dropdownButton"></div>
 
                 </div>
-
-
             </div>
         </div>
     </form>

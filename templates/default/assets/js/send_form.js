@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', e => {
 
             // если событие инициировал не скрипт
-            if(e.isTrusted){
+            if(e.isTrusted && form.id !== 'main-search'){
 
                 // отменяем отправку формы
                 e.preventDefault();

@@ -141,7 +141,6 @@ class ImportController extends BaseAdmin
                 $FileInfo = $getID3->analyze($_FILES['import']['tmp_name'][$i]);
 
                 if ($FileInfo){
-
                     $name = !empty($FileInfo['id3v2']['comments']['title'][0]) ?  $FileInfo['id3v2']['comments']['title'][0] :
                         (!empty($FileInfo['id3v1']['title']) ? $FileInfo['id3v1']['title'] : null);
 
@@ -156,7 +155,7 @@ class ImportController extends BaseAdmin
 
                         $artist = $this->conversionCodStr($artist);
 
-                        if (isset($artist)){
+                        if (!empty($artist)){
                             $checkArtist = $this->checkAndAdd($artist, $this->artistTable);
 
                             if (!$checkArtist){
@@ -169,11 +168,21 @@ class ImportController extends BaseAdmin
                         (!empty($FileInfo['id3v1']['album']) ? $FileInfo['id3v1']['album'] : null);
 
                     $album = $this->conversionCodStr($album);
-
                     $fields[$i]['album'] = $album;
 
-                    //$fields[$i]['year'] = !empty($FileInfo['id3v2']['comments']['year'][0]) ?  $FileInfo['id3v2']['comments']['year'][0] :
-                     //   (!empty($FileInfo['id3v1']['year']) ? $FileInfo['id3v1']['year'] : null);
+                    $year = !empty($FileInfo['id3v2']['comments']['year'][0]) ?  $FileInfo['id3v2']['comments']['year'][0] :
+                        (!empty($FileInfo['id3v1']['year']) ? $FileInfo['id3v1']['year'] : null);
+
+                    if (!empty($year)){
+                        $yearId = $this->checkAndAdd($year, 'year');
+
+                        if (!$yearId){
+                            return null;
+                        }
+                        $fields[$i]['year_id'] = $yearId;
+                    }
+
+                    $fields[$i]['year'] = $this->conversionCodStr($year);
 
                     $fields[$i]['alias'] = !empty($fields[$i]['name']) ? (new TextModify())->translit($fields[$i]['name']) : null;
 
@@ -182,7 +191,7 @@ class ImportController extends BaseAdmin
                         $style = !empty($FileInfo['id3v2']['comments']['genre'][0]) ?  $FileInfo['id3v2']['comments']['genre'][0] :
                             (!empty($FileInfo['id3v1']['genre']) ? $FileInfo['id3v1']['genre'] : null);
 
-                        if (isset($style)){
+                        if (!empty($style)){
                             $checkStyle = $this->checkAndAdd($style, $this->styleTable);
 
                             if (!$checkStyle){
@@ -213,11 +222,11 @@ class ImportController extends BaseAdmin
 
                     if (count($arr) === 2){
 
-                        $arr['artist'] =  preg_replace('/(^[_\s\d]+)|([_\s]+$)/', '', $arr[0]);
-                        $arr['track'] =  preg_replace('/(^[_\s]+)|([_\s]+$)/', '', $arr[1]);
+                        $arr['artist'] =  preg_replace('/(^[_\s\d\.]+)|([_\s]+$)/', '', $arr[0]);
+                        $arr['track'] =  preg_replace('/(^[_\s\.]+)|([_\s]+$)/', '', $arr[1]);
 
                     }else{
-                        $arr['track'] =  preg_replace('/(^[_\s\d]+)|([_\s]+$)/', '', $arr[0]);
+                        $arr['track'] =  preg_replace('/(^[_\s\d\.]+)|([_\s]+$)/', '', $arr[0]);
                     }
 
                     if (!$fields[$i]['name']){
@@ -293,6 +302,10 @@ class ImportController extends BaseAdmin
 
     private function checkAndAdd($param, $table){
 
+        if (empty($param)){
+            return null;
+        }
+
         $check = $this->model->get($table, [
             'where' => ['name' => $param, 'alias' => $param],
             'condition' => ['OR'],
@@ -333,13 +346,35 @@ class ImportController extends BaseAdmin
 
     private function conversionCodStr(?string $str) : ?string{
 
-        for ($i=0; $i < strlen($str); $i++){
+        // если есть не только символы из аски
+        if (strlen($str) !== mb_strlen($str)){
+            $flag = true;
 
-            if (ord($str[$i]) > 127){
-                $str = iconv('utf-8', 'iso-8859-15', $str);
-                $str = iconv('cp1251', 'utf-8', $str);
-                break;
+            for ($i=0; $i < strlen($str); $i++){
+
+                // пропускаем все однобайтовые символы
+                if (ord($str[$i]) < 127){
+                    continue;
+                }
+
+                if ($flag){
+
+                    $upperByte = ord($str[$i]) *1000;
+                    $lowerByte= ord($str[$i+1]);
+                    $code = $upperByte + $lowerByte;
+
+                    // если это не коды кирилицы в utf-8
+                    if (!(($code >= 208144 && $code <= 208191) || ($code >= 209128 && $code <= 209143) || $code === 208129 || $code === 209145)){
+                        $str = iconv('utf-8', 'iso-8859-15', $str);
+                        $str = iconv('cp1251', 'utf-8', $str);
+                        break;
+                    }
+
+                }
+
+                $flag = !$flag;
             }
+
         }
 
         return $str;

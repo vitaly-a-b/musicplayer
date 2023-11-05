@@ -16,7 +16,7 @@
 
     <header class="header">
 
-        <audio id="audio" src="" preload="none" type="audio/mp3" class="hide"></audio>
+        <audio id="audio" src="" preload="metadata" type="audio/mp3" class="hide"></audio>
 
         <div class="container">
 

@@ -337,6 +337,11 @@ li.item:hover{
     cursor: pointer;
 }
 
+.item.active{
+    background-color: lightgrey;
+}
+
+
 .item.active .action{
     background: url(/templates/default/assets/img/5ff75fd72ae204ea5ff6.svg) -84px -84px no-repeat
 }
@@ -452,7 +457,12 @@ li.item .add-to-playlist{
     position: absolute;
     bottom: -20px;
     right: 0;
-    z-index: 99;
+    z-index: 9;
+}
+
+.modal-body{
+    max-height: 400px;
+    overflow: auto;
 }
 
 li.item .add-to-playlist.active{
@@ -702,6 +712,19 @@ ul.artist{
 
     .track-name h4{
         font-size: 18px;
+    }
+
+    li.item .add-to-playlist{
+        position: fixed;
+        right: 430px;
+        top: 40px ;
+        z-index: 9;
+        max-width: 300px;
+    }
+
+    .modal-body{
+        max-height: 200px;
+        overflow: auto;
     }
 
 

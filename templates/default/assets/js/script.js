@@ -1,6 +1,4 @@
 
-document.addEventListener('DOMContentLoaded', () => {
-
     const audio = document.querySelector('#audio')
 
     const time = document.querySelector('.play-bar')
@@ -21,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let audioPlay;
 
-
     if (volumeInside && mute){
         audio.volume = mute.volumeRate = +volumeInside.style.width.replace(/%/g, '')/100
     }
@@ -33,6 +30,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    function playElementEvent(){
+
+        if(this.hasAttribute('data-url')){
+
+            if(!this.closest('.item').classList.contains('active')){
+
+                document.querySelectorAll('.item.active').forEach(elem => {
+                    elem.classList.remove('active', 'pause')
+                })
+
+                this.closest('.item').classList.add('active')
+                audio.src = this.getAttribute('data-url')
+                audio.currentTime = 0;
+
+                audioplay()
+
+            }else{
+
+                if(this.closest('.item').classList.contains('pause')){
+                    audioplay()
+
+                }else{
+                    pausefunc()
+                }
+
+            }
+
+        }else{
+
+            if (!document.querySelector('.item.active')){
+                let item = document.querySelector('.item')
+
+                if (item){
+                    item.classList.add('active')
+
+                    if (item.querySelector('.play').hasAttribute('data-url')){
+                        audio.src = item.querySelector('.play').getAttribute('data-url')
+                        audio.currentTime = 0;
+                    }
+                }
+            }
+
+            audioplay()
+
+        }
+
+    }
+
 
 
     let el = document.querySelectorAll('.play')
@@ -40,61 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el.constructor === Array || typeof el[0] !== 'undefined'){
 
         el.forEach(item=>{
-
-            item.addEventListener('click', () => {
-
-                if(item.hasAttribute('data-url')){
-
-                    if(!item.closest('.item').classList.contains('active')){
-
-                        document.querySelectorAll('.item.active').forEach(elem => {
-                            elem.classList.remove('active', 'pause')
-                        })
-
-                        item.closest('.item').classList.add('active')
-
-                        audio.src = item.getAttribute('data-url')
-
-                        audio.currentTime = 0;
-
-                        audioplay()
-
-                    }else{
-
-                        if(item.closest('.item').classList.contains('pause')){
-
-                            audioplay()
-
-                        }else{
-
-                            pausefunc()
-                        }
-
-                    }
-
-                }else{
-
-                    if (!document.querySelector('.item.active')){
-                        let item = document.querySelector('.item')
-
-                        if (item){
-                            item.classList.add('active')
-
-                            if (item.querySelector('.play').hasAttribute('data-url')){
-                                audio.src = item.querySelector('.play').getAttribute('data-url')
-                                audio.currentTime = 0;
-                            }
-
-                        }
-                    }
-
-
-                    audioplay()
-
-                }
-            })
+            item.addEventListener('click', playElementEvent)
         })
-
 
     }
 
@@ -263,22 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
-
-
-    function audioplay(){
-
-        control.classList.remove('inited')
-        control.classList.remove('pause')
-        pause.style.removeProperty('display')
-        control.classList.add('playing')
-
-        if(document.querySelector('.item.active').classList.contains('pause')){
-            document.querySelector('.item.active').classList.remove('pause')
-        }
-
-        labelTrackArtistHeader()
-
-        audio.play();
+    function intervalSet(){
 
         audioPlay = setInterval(function(){
 
@@ -318,6 +295,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 100);
 
+    }
+
+
+
+    function audioplay(){
+
+        control.classList.remove('inited')
+        control.classList.remove('pause')
+        pause.style.removeProperty('display')
+        control.classList.add('playing')
+
+        if(document.querySelector('.item.active').classList.contains('pause')){
+            document.querySelector('.item.active').classList.remove('pause')
+        }
+
+        labelTrackArtistHeader()
+
+        audio.play().then(() => {
+
+            if (audioPlay === undefined){
+                intervalSet()
+            }
+
+        }).catch(() => {
+            alert('Не загружается медиафайл')
+        })
 
     }
 
@@ -325,18 +328,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function nextTrack(){
 
         let old_active = document.querySelector('.item.active')
-        old_active.classList.remove('active')
+        let next_item
 
-        let next_item = old_active.nextElementSibling ? old_active.nextElementSibling : old_active.parentElement.firstElementChild
-        next_item.classList.add('active')
+        if (old_active){
 
-        labelTrackArtistHeader()
+            old_active.classList.remove('active')
+            next_item = old_active.nextElementSibling ? old_active.nextElementSibling : old_active.parentElement.firstElementChild
+            next_item.classList.add('active')
 
-        audio.src = next_item.querySelector('[data-url]').getAttribute('data-url')
+        }else{
+            next_item = document.querySelectorAll('.item')[0]
 
-        audio.currentTime = 0;
+            if (!next_item){
+                return
+            }
 
-        audio.play();
+            next_item.classList.add('active')
+        }
+
+        if (next_item){
+
+            labelTrackArtistHeader()
+
+            audio.src = next_item.querySelector('[data-url]').getAttribute('data-url')
+            audio.currentTime = 0;
+            audioplay()
+        }
 
     }
 
@@ -345,18 +362,30 @@ document.addEventListener('DOMContentLoaded', () => {
     function prevTrack(){
 
         let old_active = document.querySelector('.item.active')
-        old_active.classList.remove('active')
+        let prev_item
 
-        let prev_item = old_active.previousElementSibling ? old_active.previousElementSibling : old_active.parentElement.lastElementChild
-        prev_item.classList.add('active')
+        if (old_active){
+            old_active.classList.remove('active')
+            prev_item = old_active.previousElementSibling ? old_active.previousElementSibling : old_active.parentElement.lastElementChild
+            prev_item.classList.add('active')
+
+        }else{
+            prev_item = document.querySelectorAll('.item')[0]
+
+            if (!prev_item){
+                return
+            }
+
+            prev_item.classList.add('active')
+
+        }
+
 
         labelTrackArtistHeader()
 
         audio.src = prev_item.querySelector('[data-url]').getAttribute('data-url')
-
         audio.currentTime = 0;
-
-        audio.play();
+        audioplay()
     }
 
 
@@ -372,8 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
         control.classList.remove('playing')
         control.classList.add('pause')
 
-        clearInterval(audioPlay);
-
+        //clearInterval(audioPlay);
 
     }
 
@@ -410,10 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-
-
-
-})
 
 
 
@@ -648,48 +672,53 @@ async function addTrack(e){
     }
 }
 
+function deleteOrAddToPlaylist(){
+
+    document.querySelectorAll('[data-track-id].delete, [data-track-id].add').forEach(item => {
 
 
-document.querySelectorAll('[data-track-id].delete, [data-track-id].add').forEach(item => {
+        if(item.classList.contains('delete')){
+            item.addEventListener('click', deleteTrack)
+        }
 
+        if(item.classList.contains('add')){
 
-    if(item.classList.contains('delete')){
-        item.addEventListener('click', deleteTrack)
-    }
+            item.addEventListener('click', function (e){
+                //e.stopPropagation()
 
-    if(item.classList.contains('add')){
+                let menu = this.nextElementSibling
 
-        item.addEventListener('click', function (e){
-            //e.stopPropagation()
+                if (menu){
+                    menu.classList.toggle('active')
 
-            let menu = this.nextElementSibling
+                    let btnClose = menu.querySelector('button.btn-secondary')
 
-            if (menu){
-                menu.classList.toggle('active')
+                    if (btnClose){
 
-                let btnClose = menu.querySelector('button.btn-secondary')
+                        btnClose.addEventListener('click', buttonClose)
 
-                if (btnClose){
-
-                    btnClose.addEventListener('click', buttonClose)
-
-                    function buttonClose(){
-                        menu.classList.toggle('active')
-                        btnClose.removeEventListener('click', buttonClose)
+                        function buttonClose(){
+                            menu.classList.toggle('active')
+                            btnClose.removeEventListener('click', buttonClose)
+                        }
                     }
                 }
-            }
 
-        })
+            })
 
-        item.nextElementSibling.querySelectorAll('li.add-to-playlist-item').forEach(i => {
-            i.addEventListener('click', addTrack)
-        })
+            item.nextElementSibling.querySelectorAll('li.add-to-playlist-item').forEach(i => {
+                i.addEventListener('click', addTrack)
+            })
 
-    }
+        }
 
 
-})
+    })
+
+}
+
+deleteOrAddToPlaylist()
+
 
 
 
@@ -770,6 +799,9 @@ async function requestNewPlaylist(){
 
             // повешать обработчик на удаления плейлиста
             eventDeletePlaylist()
+
+            // обработчик на ссылку перехода на этот плейлист
+            playlistElement.querySelector('a').addEventListener('click', linkEventHandler)
 
             let modalWin = document.querySelectorAll('.add-to-playlist')
 
@@ -909,15 +941,313 @@ document.querySelectorAll('.burger').forEach(item => {
 
 
 
-/*
-window.addEventListener('unload', function () {
+async function linkEventHandler(event){
+    event.preventDefault()
 
-    let data = {
-        volume: 'audio.volume',
+    let element = {
+        track: {
+            0: `<li class="item">#content#</li>`,
+            1: `<div class="action play" data-url="#path#"></div>
+                <div class="description"><span class="artist">#artistname#</span> - <span class="track">#trackname#</span></div>
+                <div class="duration"><span>#trackduration#</span></div>
+                <a href="#link#" download="#artistname# - #trackname#.mp3" class="download" data-track-id="#trackid#"></a>`,
+            2: `<div class="#deleteOrAdd#" data-track-id="#trackid#"></div>`,
+            3: `<div class="modal-dialog add-to-playlist">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Выберите в какой плейлист добавить трек</h5>
+                        </div>
+                        <div class="modal-body">
+                            <ul>
+                               #playlists#
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>`
+        },
+        artist: ` <li class="item-artist" >
+                        <a href="#aliasArtist#">
+                            <div>
+                                <img src="#artistImg#" alt="нет фото">
+                                <span>#artistname#</span>
+                            </div>
+                        </a>
+                </li>`,
+        playlist: ` <li class="add-to-playlist-item" data-playlist-id="#playlistid#">#playlistname#</li>`,
+        pagination: ` <div class="pagination">
+                            <div class="pagination-description">
+                                #pagination#
+                            </div>
+                        </div>`
     }
 
-    navigator.sendBeacon('/artist/log', JSON.stringify(data));
-});*/
+    try{
+
+        let href
+
+        switch (this.tagName){
+
+            case 'A':
+                if (!this.hasAttribute('href')){
+                    throw new Error('У тэга A нет href')
+                }
+
+                href = this.getAttribute('href')
+                break
+
+            case 'FORM':
+                let formData = new FormData(this)
+                href = `/search?search=${formData.get('search')}&choice=${formData.get('choice')}`
+                break
+
+            default:
+                throw new Error('Не поддерживаемый тэг')
+
+        }
+
+        history.pushState(null, null, href ? href : '/')
+
+        let response = await fetch ( href ? href : '/', {headers: {'X-Requested-With': 'Request'}})
+        let res
+
+        if (response.ok){
+            res = await response.json()
+
+            let tracks = []
+            let artists = []
+
+            if (res['tracks'] && res['tracks'].length){
+
+                let trackElement
+                let duration
+                let el2
+
+                for (let track of res['tracks']){
+
+                    trackElement = element.track["1"]
+                    trackElement = trackElement.replace(/#path#/ig, res['uploadDir'] + track['link'])
+                    trackElement = trackElement.replace(/#artistname#/ig, track['artist_name'])
+                    trackElement = trackElement.replace(/#trackname#/ig, track['name'])
+
+                    duration = track['duration'] ? String(Math.floor(track['duration']/60)).replace(/^\d?$/, '0$&') + ':' + String(track['duration']%60).replace(/^\d?$/, '0$&')  : ''
+
+                    trackElement = trackElement.replace(/#trackduration#/ig, duration)
+                    trackElement = trackElement.replace(/#trackid#/ig, track['id'])
+
+                    if (res['playlists'] && res['playlists'].length){
+
+                        if (/\?.*?pl=\d+/.test(href)){
+
+                            el2 = element.track["2"].replace(/#deleteOrAdd#/ig, 'delete')
+                            el2 = el2.replace(/#trackid#/ig, track['id'])
+                            trackElement += el2
+
+                        }else{
+
+                            el2 = element.track["2"].replace(/#deleteOrAdd#/ig, 'add')
+                            el2 = el2.replace(/#trackid#/ig, track['id'])
+                            trackElement += el2
+
+                        }
+
+                        let playlists = ''
+                        let val = ''
+
+                        for (let playlist of res['playlists']){
+
+                            val = element.playlist.replace(/#playlistid#/ig, playlist['id'])
+                            val = val.replace(/#playlistname#/ig, playlist['name'])
+                            playlists += val
+
+                        }
+
+                        trackElement += element.track["3"].replace(/#playlists#/ig, playlists)
+
+                    }else{
+
+                        let pl = document.querySelector('.block-cont.boxShadow')
+
+                        if (pl){
+                            pl.innerHTML = `<h2>Плейлисты</h2><span>Чтобы создавать свои плейлисты авторизуйтесь</span>`
+                        }
+
+
+                    }
+
+                    trackElement = element.track["0"].replace(/#content#/ig, trackElement)
+                    tracks.push(trackElement)
+
+                }
+
+            }else if (res['artists'] && res['artists'].length){
+
+                let artistElement
+
+                for (let artist of res['artists']){
+
+                    artistElement = element.artist.replace(/#aliasArtist#/ig, '/?artist=' + artist['alias'])
+                    artistElement = artistElement.replace(/#artistname#/ig, artist['name'])
+                    artists.push(artistElement)
+
+                }
+
+            }
+
+            // установка активного плейлиста
+            if (res['playlists'] && res['playlists'].length){
+                let activePlaylistId = null
+
+                for (let playlist of res['playlists']){
+
+                    if (typeof playlist['active'] !== 'undefined' && playlist['active'] === true){
+                        activePlaylistId = +playlist['id']
+                        break
+                    }
+                }
+
+                let playlistActive = document.querySelector('.playlist-item.active')
+
+                if (playlistActive){
+                    playlistActive.classList.remove('active')
+
+                }
+
+                if (activePlaylistId){
+                    let newActivePlaylist = document.querySelector(`.playlist-item[data-playlist-id="${activePlaylistId}"]`)
+
+                    if (!newActivePlaylist){
+                        throw new Error('Не найден плейлист для установки его активным')
+                    }
+
+                    newActivePlaylist.classList.add('active')
+
+                }
+
+            }
+
+            let ul = document.querySelector('ul.mainSongs') ? document.querySelector('ul.mainSongs') : document.querySelector('ul.artist')
+
+            if (ul){
+
+                let ul2 = ul.querySelectorAll('li.item') ? ul.querySelectorAll('li.item') : ul.querySelectorAll('li.item-artist')
+
+                ul2.forEach(item => {
+                    item.remove()
+                })
+            }
+
+            if (tracks.length){
+
+                if (!ul){
+                    ul = document.createElement('ul')
+                    ul.classList.add('mainSongs')
+
+                    let parentUl = document.querySelector('.module-layout.boxShadow')
+
+                    if (!parentUl){
+                        throw new Error('Не найден элемент .module-layout.boxShadow')
+                    }
+
+                    parentUl.append(ul)
+
+                }
+
+                if (ul.classList.contains('artist')){
+                    ul.classList.remove('artist')
+                    ul.classList.add('mainSongs')
+                }
+
+                ul.innerHTML = tracks.join('')
+                deleteOrAddToPlaylist()
+
+                ul.querySelectorAll('.play').forEach(item => {
+                    item.addEventListener('click', playElementEvent)
+                })
+
+
+            }else if (artists.length){
+
+                if (ul.classList.contains('mainSongs')){
+                    ul.classList.remove('mainSongs')
+                    ul.classList.add('artist')
+                }
+
+                ul.innerHTML = artists.join('')
+
+            }
+
+
+            let pagination = document.querySelector('.pagination')
+
+            if (res['pages']){
+
+                if (pagination){
+                    pagination.querySelector('.pagination-description').innerHTML = res['pages']
+
+                }else{
+                    pagination = element.pagination.replace(/#pagination#/ig, res['pages'])
+                    document.querySelector('.module-layout.boxShadow').insertAdjacentHTML('beforeend', pagination)
+                }
+
+                eventLink('.pagination')
+
+            }else{
+
+                if (pagination){
+                    pagination.remove()
+                }
+
+            }
+
+        }
+
+
+
+    }catch (e){
+
+        console.error(e)
+
+        if(typeof e.message !== 'undefined'){
+            alert(e.message)
+        }
+
+    }
+
+}
+
+function eventLink(tag){
+    document.querySelector(tag).querySelectorAll('a').forEach(item => {
+        item.addEventListener('click', linkEventHandler)
+    })
+}
+
+eventLink('main')
+
+
+
+document.querySelectorAll('form[data-form-search]').forEach(form => {
+    form.addEventListener('submit', linkEventHandler)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

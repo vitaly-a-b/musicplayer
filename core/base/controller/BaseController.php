@@ -87,6 +87,23 @@ abstract class BaseController
 
         }
 
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'Request' && !empty($data)){
+
+            if (!empty($data['pages']) && is_array($data['pages'])){
+                $data['pages'] = $this->pagination($data['pages'], '', true);
+            }
+
+            if(method_exists($this, 'beforeOutput')){
+                $this->beforeOutput($data);
+            }
+
+            preg_match('/^https?:\/\/[\w\.]+(\/|$)/i', $_SERVER['HTTP_REFERER'], $matches);
+
+            $data['uploadDir'] = $matches[0] . UPLOAD_DIR;
+
+            exit(json_encode($data));
+        }
+
         if(method_exists($this, $outputData)){
 
             $page = $this->$outputData($data);

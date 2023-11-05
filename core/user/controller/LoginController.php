@@ -102,7 +102,7 @@ class LoginController extends BaseUser
         if(UserModel::instance()->checkUser($res['id'])){
 
             $this->sendSuccess($this->translateEl('Добро пожаловать') . ' ' . $res['name']);
-            $this->redirect($this->alias('lk'));
+            $this->redirect($this->alias());
 
         }
 

@@ -683,7 +683,7 @@ trait BaseMethods
 
 
 
-    protected function pagination($pages, $template = ''){
+    protected function pagination($pages, $template = '', $returnStr = false){
         /*Поиск пораметра Page в адресной строке*/
 
         $str = $_SERVER['REQUEST_URI'];
@@ -730,6 +730,8 @@ trait BaseMethods
         if($template){
 
             $templatesArr = ['first', 'back', 'previous', 'current', 'next', 'forward', 'last'];
+
+            $allContent = '';
 
             foreach ($templatesArr as $key => $element){
 
@@ -791,7 +793,12 @@ trait BaseMethods
 
                                 $content = str_replace($links[0], $link, $matches[1]);
 
-                                echo $content;
+                                if ($returnStr === false){
+                                    echo $content;
+
+                                }else{
+                                    $allContent .= $content;
+                                }
 
 
                             }
@@ -804,6 +811,9 @@ trait BaseMethods
 
             }
 
+            if ($returnStr === true){
+                return $allContent;
+            }
 
         }
 

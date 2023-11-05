@@ -13,7 +13,7 @@
 
                     <?php if (!empty($tracks)): ?>
 
-                        <ul class="mainSongs unstyled ajaxContent songs">
+                        <ul class="mainSongs">
 
                             <?php foreach ($tracks as $track): ?>
 
@@ -35,9 +35,6 @@
 
                                          <?php if (!isset($_GET['pl'])):?>
 
-
-
-
                                                 <div class="modal-dialog add-to-playlist">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -58,7 +55,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
 
                                          <?php endif;?>
                                     <?php endif;?>

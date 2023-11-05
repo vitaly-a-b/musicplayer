@@ -84,13 +84,10 @@ class BaseUser extends BaseController
             'single' => true
         ]);
 
-
         define('QTY', $this->set['catalog_qty'] ?? _QTY);
 
         if(method_exists($this, 'beforeInput')){
-
             $this->beforeInput();
-
         }
 
         try {
