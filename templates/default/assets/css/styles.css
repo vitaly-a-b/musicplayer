@@ -455,13 +455,13 @@ li.playlist-item.active a{
 li.item .add-to-playlist{
     display: none;
     position: absolute;
-    bottom: -20px;
+    bottom: -60px;
     right: 0;
-    z-index: 9;
+    z-index: 12;
 }
 
 .modal-body{
-    max-height: 400px;
+    max-height: 150px;
     overflow: auto;
 }
 

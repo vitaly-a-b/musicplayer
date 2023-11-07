@@ -721,25 +721,26 @@ deleteOrAddToPlaylist()
 
 
 
+function activeMenuNewPlaylist() {
 
+    document.querySelectorAll('.create-new-playlist > button').forEach(item => {
 
-document.querySelectorAll('.create-new-playlist > button').forEach(item => {
+        item.addEventListener('click', () => {
+            menu = item.closest('.create-new-playlist').querySelector('.menu-create-playlist')
 
-    item.addEventListener('click', () => {
-        menu = item.closest('.create-new-playlist').querySelector('.menu-create-playlist')
-
-        if (menu){
-            menu.classList.toggle('active')
-        }
-    })
-
-})
-/*
-    document.querySelectorAll('li.item .add').forEach(item => {
-        item.addEventListener('click', function (){
-            this.nextElementSibling.classList.toggle('active')
+            if (menu){
+                menu.classList.toggle('active')
+            }
         })
-    })*/
+
+    })
+}
+
+
+activeMenuNewPlaylist()
+
+
+
 
 async function requestNewPlaylist(){
 
@@ -839,9 +840,16 @@ async function requestNewPlaylist(){
 }
 
 
-document.querySelectorAll('.menu-create-playlist input[type=submit], .menu-create-playlist input[type=reset]').forEach(item => {
-    item.addEventListener('click', requestNewPlaylist)
-})
+function menuCreatePlaylist(){
+
+    document.querySelectorAll('.menu-create-playlist input[type=submit], .menu-create-playlist input[type=reset]').forEach(item => {
+        item.addEventListener('click', requestNewPlaylist)
+    })
+}
+
+menuCreatePlaylist()
+
+
 
 
 
@@ -981,7 +989,24 @@ async function linkEventHandler(event){
                             <div class="pagination-description">
                                 #pagination#
                             </div>
-                        </div>`
+                        </div>`,
+        sidebar: {
+            0: `    <h2>Плейлисты</h2>
+                    <div class="create-new-playlist boxShadow">
+                        <button>Создать новый плейлист</button>
+                        <div class="menu-create-playlist boxShadow">
+                            <div>
+                                <input type="text" placeholder="Введите название плейлиста">
+                            </div>
+                            <div>
+                                <input type="submit" value="Создать">
+                                <input type="reset" value="отменить">
+                            </div>
+                        </div>
+                   </div>
+                   <span class="notPlaylist">У Вас еще нет не одного плейлиста</span>`,
+            1:  `<h2>Плейлисты</h2><span>Чтобы создавать свои плейлисты авторизуйтесь</span>`
+        }
     }
 
     try{
@@ -1000,7 +1025,7 @@ async function linkEventHandler(event){
 
             case 'FORM':
                 let formData = new FormData(this)
-                href = `/search?search=${formData.get('search')}&choice=${formData.get('choice')}`
+                href = `${this.getAttribute('action')}?search=${formData.get('search')}&choice=${formData.get('choice')}`
                 break
 
             default:
@@ -1015,7 +1040,7 @@ async function linkEventHandler(event){
 
         if (response.ok){
             res = await response.json()
-
+            console.log(res)
             let tracks = []
             let artists = []
 
@@ -1036,6 +1061,7 @@ async function linkEventHandler(event){
 
                     trackElement = trackElement.replace(/#trackduration#/ig, duration)
                     trackElement = trackElement.replace(/#trackid#/ig, track['id'])
+                    trackElement = trackElement.replace(/#link#/ig, res['uploadDir'] + track['link'])
 
                     if (res['playlists'] && res['playlists'].length){
 
@@ -1071,7 +1097,17 @@ async function linkEventHandler(event){
                         let pl = document.querySelector('.block-cont.boxShadow')
 
                         if (pl){
-                            pl.innerHTML = `<h2>Плейлисты</h2><span>Чтобы создавать свои плейлисты авторизуйтесь</span>`
+
+                            // если пользовыатель залогинен
+                            if (typeof res['user'] !== 'undefined' && res['user']){
+                                pl.innerHTML = element.sidebar["0"]
+                                activeMenuNewPlaylist()
+                                menuCreatePlaylist()
+
+                            }else{
+                                pl.innerHTML = element.sidebar["1"]
+                            }
+
                         }
 
 

@@ -101,6 +101,10 @@ abstract class BaseController
 
             $data['uploadDir'] = $matches[0] . UPLOAD_DIR;
 
+            if ($this->userData){
+                $data['user'] = true;
+            }
+
             exit(json_encode($data));
         }
 
