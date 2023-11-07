@@ -20,7 +20,7 @@
                                 <li class="item-artist" >
                                     <a href="<?=$this->alias('', 'artist=' . $artist['alias'])?>">
                                         <div>
-                                            <img src="<?=!empty($artist['img']) ? $artist['img'] : '/templates/default/assets/img/card.jpg'?>" alt="нет фото">
+                                            <img src="<?=!empty($artist['img']) ? PATH . UPLOAD_DIR . $artist['img'] :  PATH . UPLOAD_DIR .'artist/card.jpg'?>" alt="нет фото">
                                             <span><?=$artist['name']?></span>
                                         </div>
                                     </a>

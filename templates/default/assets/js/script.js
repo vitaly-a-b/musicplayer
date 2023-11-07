@@ -1040,7 +1040,7 @@ async function linkEventHandler(event){
 
         if (response.ok){
             res = await response.json()
-            console.log(res)
+
             let tracks = []
             let artists = []
 
@@ -1126,6 +1126,7 @@ async function linkEventHandler(event){
 
                     artistElement = element.artist.replace(/#aliasArtist#/ig, '/?artist=' + artist['alias'])
                     artistElement = artistElement.replace(/#artistname#/ig, artist['name'])
+                    artistElement = artistElement.replace(/#artistImg#/ig,  artist['img'] ? res['uploadDir'] + artist['img'] : res['uploadDir'] + 'artist/card.jpg')
                     artists.push(artistElement)
 
                 }
@@ -1168,7 +1169,7 @@ async function linkEventHandler(event){
 
             if (ul){
 
-                let ul2 = ul.querySelectorAll('li.item') ? ul.querySelectorAll('li.item') : ul.querySelectorAll('li.item-artist')
+                let ul2 = ul.querySelectorAll('li.item').length ? ul.querySelectorAll('li.item') : ul.querySelectorAll('li.item-artist')
 
                 ul2.forEach(item => {
                     item.remove()
