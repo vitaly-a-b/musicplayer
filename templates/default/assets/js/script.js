@@ -1020,6 +1020,13 @@ async function linkEventHandler(event){
                     throw new Error('У тэга A нет href')
                 }
 
+                if (this.closest('.desktop-sidebar')){
+
+                    if (document.querySelector('.content.active')){
+                        document.querySelector('.content.active').classList.remove('active')
+                    }
+                }
+
                 href = this.getAttribute('href')
                 break
 
