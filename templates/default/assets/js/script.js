@@ -395,7 +395,7 @@
 
         audio.pause();
 
-        document.querySelector('.item.active').classList.add('pause')
+        document.querySelector('.item.active') && document.querySelector('.item.active').classList.add('pause')
 
         pause.style.display = 'none'
         control.classList.remove('playing')
@@ -754,7 +754,7 @@ async function requestNewPlaylist(){
                 throw new Error('Не заданно имя плейлиста')
             }
 
-            name = name.replace(/[^\w\s]/igu, '').trim()
+            name = name.replace(/[^a-zA-ZА-Яа-я0-9\s]/ig, '').trim()
 
             let data = {
                 ajax: 'add_to_playlist',
@@ -958,8 +958,8 @@ async function linkEventHandler(event){
             1: `<div class="action play" data-url="#path#"></div>
                 <div class="description"><span class="artist">#artistname#</span> - <span class="track">#trackname#</span></div>
                 <div class="duration"><span>#trackduration#</span></div>
-                <a href="#link#" download="#artistname# - #trackname#.mp3" class="download" data-track-id="#trackid#"></a>`,
-            2: `<div class="#deleteOrAdd#" data-track-id="#trackid#"></div>`,
+                <a href="#link#" download="#artistname# - #trackname#.mp3" class="download" data-track-id="#trackid#" title="Скачать трек"></a>`,
+            2: `<div class="#deleteOrAdd#" title="#delOrAdd#" data-track-id="#trackid#"></div>`,
             3: `<div class="modal-dialog add-to-playlist">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1076,12 +1076,14 @@ async function linkEventHandler(event){
 
                             el2 = element.track["2"].replace(/#deleteOrAdd#/ig, 'delete')
                             el2 = el2.replace(/#trackid#/ig, track['id'])
+                            el2 = el2.replace(/#delOrAdd#/ig, 'Удалить трек из плейлиста')
                             trackElement += el2
 
                         }else{
 
                             el2 = element.track["2"].replace(/#deleteOrAdd#/ig, 'add')
                             el2 = el2.replace(/#trackid#/ig, track['id'])
+                            el2 = el2.replace(/#delOrAdd#/ig, 'Добавить трек в плейлист')
                             trackElement += el2
 
                         }

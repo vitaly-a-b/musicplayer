@@ -26,11 +26,11 @@
                 <button>Создать новый плейлист</button>
                 <div class="menu-create-playlist boxShadow">
                     <div>
-                        <input type="text" placeholder="Введите название плейлиста">
+                        <input type="text" class="form-control" placeholder="Введите название плейлиста">
                     </div>
-                    <div>
-                        <input type="submit" value="Создать">
-                        <input type="reset" value="отменить">
+                    <div style="padding: 10px">
+                        <input type="submit" class="btn btn-success" value="Создать">
+                        <input type="reset" class="btn btn-danger" value="Отменить">
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     <?php foreach ($playlists as $playlist): ?>
                         <li class="playlist-item <?=!empty($playlist['active']) ? 'active' : '' ?>" data-playlist-id="<?=$playlist['id']?>">
                             <a href="<?=$this->alias('', 'pl=' . $playlist['id'])?>"><?=$playlist['name']?></a>
-                            <div class="delete"></div>
+                            <div class="delete" title="Удалить плейлист"></div>
                         </li>
                     <?php endforeach;?>
 

@@ -274,19 +274,12 @@ main .container{
     padding: 6px;
 }
 
-.inInputSearch{
-    position: relative;
-    border: 1px solid #878a85;
-    border-radius: 7px;
-}
-
 
 .inInputSearch input{
     width: 100%;
     height: 37px;
     font-weight: bold;
     line-height: 37px;
-    border: none;
     padding-left: 5px;
 }
 
@@ -314,6 +307,12 @@ main .container{
     height: 37px;
     width: 150px;
     border: none;
+}
+
+.inInputSearch{
+    position: relative;
+    border: 1px solid #878a85;
+    border-radius: 7px;
 }
 
 li.item{
