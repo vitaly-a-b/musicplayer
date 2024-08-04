@@ -8,7 +8,7 @@ const UPLOAD_DIR = 'files/';
 
 const COOKIE_VERSION = '1.0.0';
 const CRYPT_KEY = 'SDF*999HT5DrsDFsdf098098*&&^$%&^sdf54F873fDSFSF-SDF*9879790SDDFsdf098098*&&^$%&^sdfsddsfsfDSFdd511';
-const COOKIE_TIME = 1800;
+const COOKIE_TIME = 18000;
 const BLOCK_TIME = 3;
 
 const END_SLASH = '/';
