@@ -177,12 +177,16 @@ class ImportController extends BaseAdmin
                         $yearId = $this->checkAndAdd($year, 'year');
 
                         if (!$yearId){
-                            return null;
+                            $fields[$i]['year_id'] =  null;
+
+                        }else{
+                            $fields[$i]['year_id'] = $yearId;
+
                         }
-                        $fields[$i]['year_id'] = $yearId;
+
                     }
 
-                    $fields[$i]['year'] = $this->conversionCodStr($year);
+                    $fields[$i]['year'] = $this->conversionCodStr(mb_check_encoding($year) ? $year : null);
 
                     $fields[$i]['alias'] = !empty($fields[$i]['name']) ? (new TextModify())->translit($fields[$i]['name']) : null;
 
@@ -302,7 +306,7 @@ class ImportController extends BaseAdmin
 
     private function checkAndAdd($param, $table){
 
-        if (empty($param)){
+        if (empty($param) || !mb_check_encoding($param)){
             return null;
         }
 

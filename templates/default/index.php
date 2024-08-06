@@ -13,8 +13,6 @@
 
                     <?php if (!empty($tracks)): ?>
 
-                        <?php preg_match('/^https?:\/\/[\w\.]+(\/|$)/i', $_SERVER['HTTP_REFERER'], $matches); ?>
-
                         <ul class="mainSongs">
 
                             <?php foreach ($tracks as $track): ?>
@@ -30,7 +28,7 @@
                                         <span><?=!empty($track['duration']) ? (sprintf('%02d', floor($track['duration']/60)) . ':' . sprintf('%02d', $track['duration']%60)) : '' ?></span>
                                     </div>
 
-                                    <a href="<?=$matches[0] . UPLOAD_DIR . $track['link']?>" download="<?=$track['artist_name']?> - <?=$track['name']?>.mp3" class="download" data-track-id="<?=$track['id']?>" title="Скачать трек"></a>
+                                    <a href="<?=PATH . UPLOAD_DIR . $track['link']?>" download="<?=$track['artist_name']?> - <?=$track['name']?>.mp3" class="download" data-track-id="<?=$track['id']?>" title="Скачать трек"></a>
 
                                     <?php if (!empty($playlists)):?>
                                         <div class="<?=isset($_GET['pl']) ? 'delete' : 'add'?>" title="<?=isset($_GET['pl']) ? 'Удалить трек из плейлиста' : 'Добавить трек в плейлист'?>" data-track-id="<?=$track['id']?>"></div>
