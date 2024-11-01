@@ -6,8 +6,8 @@ const TEMPLATE = 'templates/default/';
 const ADMIN_TEMPLATE = 'core/admin/view/';
 const UPLOAD_DIR = 'files/';
 
-const COOKIE_VERSION = '1.0.0';
-const CRYPT_KEY = 'SDF*999HT5DrsDFsdf098098*&&^$%&^sdf54F873fDSFSF-SDF*9879790SDDFsdf098098*&&^$%&^sdfsddsfsfDSFdd511';
+const COOKIE_VERSION = '1.0.1';
+const CRYPT_KEY = 'mX50TzMm30QEBkw9UxppprA81N05BF1/7Y0FH0LPeO+llCyB46w4FiKj7VDKwjko';
 const COOKIE_TIME = 18000;
 const BLOCK_TIME = 3;
 
@@ -17,9 +17,6 @@ const END_SLASH = '/';
 const _QTY = 36;
 
 const QTY_LINKS = 3;
-
-const CART = 'cookie';
-const CART_COOKIE_TIME = 4; //значение в днях
 
 const BASE_CSS_JS = [
     'style' => [],

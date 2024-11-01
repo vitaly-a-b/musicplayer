@@ -7,6 +7,8 @@ namespace core\user\controller;
 class InformController extends BaseUser
 {
 
+
+    // данные о настройках уровня громкости для записи в сессию
     protected function inputData(){
 
         // читаем содержимое из потока
